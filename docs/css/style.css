@@ -1158,3 +1158,50 @@ html {
 section {
     scroll-margin-top: 80px;
 }
+
+/* Scroll to Top/Bottom Buttons */
+.scroll-btn {
+    position: fixed;
+    right: var(--space-5); /* 1.25rem */
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all var(--transition-normal);
+}
+
+.scroll-btn:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-xl);
+}
+
+.scroll-btn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#scrollTopBtn {
+    bottom: var(--space-5);
+}
+
+#scrollBottomBtn {
+    /* Position 60px above the top button (50px height + 10px gap) */
+    bottom: calc(var(--space-5) + 60px);
+}
+
+.scroll-btn svg {
+    width: 28px;
+    height: 28px;
+}

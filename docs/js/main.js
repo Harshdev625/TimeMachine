@@ -313,6 +313,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize carousel
     carousel.init();
+
+    // Get the button elements from the HTML
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    const scrollBottomBtn = document.getElementById('scrollBottomBtn');
+
+    // Function to handle the visibility of both scroll buttons
+    const handleScrollButtons = () => {
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
+        const scrollPosition = window.scrollY;
+
+        // --- Scroll to Top Button Logic ---
+        // Show the button if user has scrolled down more than 300px
+        if (scrollPosition > 300) {
+            scrollTopBtn.classList.add('visible');
+        } else {
+            scrollTopBtn.classList.remove('visible');
+        }
+
+        // --- Scroll to Bottom Button Logic ---
+        // Show the button if user is near the top, but hide it when they get close to the bottom
+        const isNearBottom = scrollPosition + clientHeight >= scrollHeight - 300;
+        if (scrollPosition > 100 && !isNearBottom) {
+            scrollBottomBtn.classList.add('visible');
+        } else {
+            scrollBottomBtn.classList.remove('visible');
+        }
+    };
+
+    // --- Click Event Listeners ---
+    
+    // Smoothly scroll to the top of the page
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smoothly scroll to the bottom of the page
+    scrollBottomBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Add a scroll event listener to the window to check button visibility
+    window.addEventListener('scroll', handleScrollButtons);
+
+    // Initial check when the page loads
+    handleScrollButtons();
 });
 
 // Add some CSS classes for enhanced animations
