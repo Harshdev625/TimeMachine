@@ -14,7 +14,7 @@ if (!JWT_SECRET) throw new Error('JWT_SECRET environment variable is required');
 if (!BCRYPT_ROUNDS || isNaN(BCRYPT_ROUNDS)) throw new Error('BCRYPT_ROUNDS environment variable is required and must be a number');
 
 // Google OAuth
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '367987706093-b1h91vfj98bej9t67n0l3jrg6h9psegj.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '<Google auth client ID>';
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 // Unified response helpers

@@ -72,7 +72,7 @@ async function signInWithGoogle() {
   try {
     const redirectUri = chrome.identity.getRedirectURL('oauth2');
     console.log(redirectUri);
-    const clientId = '367987706093-b1h91vfj98bej9t67n0l3jrg6h9psegj.apps.googleusercontent.com';
+    const clientId = '<Google auth client ID>';
     const scope = encodeURIComponent('openid email profile');
     const nonce = Math.random().toString(36).slice(2);
     const state = Math.random().toString(36).slice(2);
