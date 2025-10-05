@@ -86,7 +86,7 @@ app.use('/api/focus-sessions', authenticateToken, focusSessionRoutes);
 app.use('/api/blocked-sites', authenticateToken, blockedSitesRoutes);
 app.use('/api/blocked-keywords', authenticateToken, blockedKeywordsRoutes);
 app.use('/api/problem-sessions', authenticateToken, problemSessionRoutes);
-app.use('/api/mail', mailRoutes);
+app.use('/api/mail',authenticateToken, mailRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
