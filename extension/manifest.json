@@ -8,6 +8,7 @@
     "tabs",
     "activeTab",
     "storage",
+    "identity",
     "alarms",
     "idle",
     "windows",
@@ -16,7 +17,9 @@
   "host_permissions": [
     "https://timemachine-1.onrender.com/*",
     "https://api.emailjs.com/*",
-    "https://quickchart.io/*"
+    "https://quickchart.io/*",
+    "https://accounts.google.com/*",
+    "https://www.googleapis.com/*"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -47,7 +50,7 @@
     }
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://timemachine-1.onrender.com https://api.emailjs.com https://quickchart.io"
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://timemachine-1.onrender.com https://api.emailjs.com https://quickchart.io https://www.googleapis.com https://accounts.google.com"
   },
   "web_accessible_resources": [
     {

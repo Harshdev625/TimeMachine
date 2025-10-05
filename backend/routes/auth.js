@@ -5,12 +5,17 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { validateEmail, normalizeEmail, validatePassword } = require('../utils/validation');
 const { v4: uuidv4 } = require('uuid');
+const { OAuth2Client } = require('google-auth-library');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const BCRYPT_ROUNDS = Number(process.env.BCRYPT_ROUNDS);
 
 if (!JWT_SECRET) throw new Error('JWT_SECRET environment variable is required');
 if (!BCRYPT_ROUNDS || isNaN(BCRYPT_ROUNDS)) throw new Error('BCRYPT_ROUNDS environment variable is required and must be a number');
+
+// Google OAuth
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '367987706093-b1h91vfj98bej9t67n0l3jrg6h9psegj.apps.googleusercontent.com';
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 // Unified response helpers
 function sendBadRequest(res, message) { return res.status(400).json({ error: message || 'Bad request' }); }
@@ -90,6 +95,43 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Server error during login', details: error.message });
+  }
+});
+
+// Google OAuth login: exchange Google ID token for our JWT
+router.post('/google', async (req, res) => {
+  try {
+    const { idToken } = req.body;
+    if (!idToken) return sendBadRequest(res, 'idToken is required');
+
+    const ticket = await googleClient.verifyIdToken({ idToken, audience: GOOGLE_CLIENT_ID });
+    const payload = ticket.getPayload();
+    const email = payload?.email;
+    if (!email) return sendBadRequest(res, 'Email not found in Google token');
+
+    let user = await User.findOne({ email: normalizeEmail(email) }).select('+password');
+    if (!user) {
+      // Create a user with a random password (not used for Google auth)
+      const randomPassword = uuidv4();
+      const hashedPassword = await bcrypt.hash(randomPassword, BCRYPT_ROUNDS);
+      user = new User({
+        email: normalizeEmail(email),
+        password: hashedPassword,
+        role: 'user',
+        settings: { receiveReports: true, reportFrequency: 'weekly', categories: new Map() },
+        lastActive: new Date()
+      });
+      await user.save();
+    } else {
+      user.lastActive = new Date();
+      await user.save();
+    }
+
+    const token = issueToken(user);
+    res.status(200).json({ message: 'Login successful', token, email: user.email });
+  } catch (error) {
+    console.error('Google auth error:', error);
+    res.status(401).json({ error: 'Invalid Google token', details: error.message });
   }
 });
 

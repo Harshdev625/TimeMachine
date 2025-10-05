@@ -87,6 +87,23 @@ const authRequest = async (type, email, password) => {
   }
 };
 
+// Google OAuth login
+async function loginWithGoogle(idToken) {
+  const backendUrl = await resolveBackendUrl();
+  const res = await fetch(`${backendUrl}/api/auth/google`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ idToken })
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || data.error || 'Google login failed');
+  if (!data.token || !data.email) throw new Error('Invalid Google login response');
+  await TokenStorage.setToken(data.token, data.email);
+  window.__TM_AUTH_CACHE__ = { last: Date.now(), ok: true };
+  try { chrome.runtime.sendMessage({ action: 'triggerImmediateSync' }); } catch {}
+  return true;
+}
+
 // Check authentication status
 const isAuthenticated = async () => {
   window.__TM_AUTH_CACHE__ = window.__TM_AUTH_CACHE__ || { last: 0, ok: false };
@@ -104,11 +121,11 @@ const isAuthenticated = async () => {
       window.__TM_AUTH_CACHE__ = { last: Date.now(), ok: true };
       return true;
     }
-    if (res.status === 429) {
-      console.warn('Token verification rate-limited');
-      window.__TM_AUTH_CACHE__ = { last: Date.now(), ok: true };
-      return true;
-    }
+    // if (res.status === 429) {
+    //   console.warn('Token verification rate-limited');
+    //   window.__TM_AUTH_CACHE__ = { last: Date.now(), ok: true };
+    //   return true;
+    // }
     const data = res.headers.get('content-type')?.includes('application/json') ? await res.json().catch(() => ({})) : { message: await res.text().catch(() => '') };
     console.warn('Token verification failed:', data || { status: res.status });
     if (data?.code === 'TOKEN_EXPIRED' || data?.code === 'INVALID_TOKEN') await TokenStorage.clearToken();
@@ -190,5 +207,5 @@ const resolveBackendUrl = async () => {
   return renderBase;
 };
 
-window.Auth = { authenticateUser, login, signup, logout, isAuthenticated };
+window.Auth = { authenticateUser, login, signup, logout, isAuthenticated, loginWithGoogle };
 try { window.TokenStorage = TokenStorage; } catch {}

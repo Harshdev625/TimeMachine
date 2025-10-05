@@ -68,6 +68,41 @@ function getElements(selector) {
   try { return document.querySelectorAll(selector); } catch { return []; }
 }
 
+async function signInWithGoogle() {
+  try {
+    const redirectUri = chrome.identity.getRedirectURL('oauth2');
+    console.log(redirectUri);
+    const clientId = '367987706093-b1h91vfj98bej9t67n0l3jrg6h9psegj.apps.googleusercontent.com';
+    const scope = encodeURIComponent('openid email profile');
+    const nonce = Math.random().toString(36).slice(2);
+    const state = Math.random().toString(36).slice(2);
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(clientId)}&response_type=id_token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&nonce=${encodeURIComponent(nonce)}&state=${encodeURIComponent(state)}&prompt=select_account`;
+    const responseUrl = await new Promise((resolve, reject) => {
+      chrome.identity.launchWebAuthFlow({ url: authUrl, interactive: true }, redirectUrl => {
+        if (chrome.runtime.lastError) return reject(new Error(chrome.runtime.lastError.message));
+        if (!redirectUrl) return reject(new Error('No redirect URL returned'));
+        resolve(redirectUrl);
+      });
+    });
+    const url = new URL(responseUrl);
+    const idToken = url.hash.match(/id_token=([^&]+)/)?.[1];
+    if (!idToken) throw new Error('Google sign-in failed: no id_token');
+    const success = await Auth.loginWithGoogle(decodeURIComponent(idToken));
+    if (!success) throw new Error('Google sign-in failed');
+    const { email } = await TokenStorage.getToken();
+    await chrome.storage.local.set({ userEmail: email });
+    getElement(ELEMENTS.emailPrompt).classList.add('hidden');
+    getElement(ELEMENTS.mainApp).classList.remove('hidden');
+    showToast('Signed in with Google!');
+    updateEmailUI(email);
+    switchMainTab('analytics');
+    document.dispatchEvent(new CustomEvent('tm-auth-success', { detail: { email } }));
+  } catch (error) {
+    console.error('Google sign-in error:', error);
+    showError(error.message || 'Google sign-in failed', ELEMENTS.emailError);
+  }
+}
+
 async function resolveBackendUrl() {
   const now = Date.now();
   if (backendUrlCache.value && (now - backendUrlCache.ts) < BACKEND_URL_TTL) return backendUrlCache.value;
@@ -118,6 +153,7 @@ function initTheme() {
 function setupEventListeners() {
   const events = [
     { el: ELEMENTS.saveEmailBtn, event: 'click', handler: saveEmail },
+    { el: 'googleSignInBtn', event: 'click', handler: signInWithGoogle },
     { el: ELEMENTS.toggleAuthMode, event: 'click', handler: toggleAuthMode },
     { el: ELEMENTS.toggleThemeBtn, event: 'click', handler: () => getElement(ELEMENTS.themeDropdown).classList.toggle("hidden") },
     { el: ELEMENTS.closeNotification, event: 'click', handler: () => getElement(ELEMENTS.updateNotification).classList.add("hidden") },
