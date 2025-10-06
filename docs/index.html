@@ -25,6 +25,10 @@
     <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Add GSAP + Physics2D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Physics2DPlugin.min.js"></script>
 </head>
 
 <body>
@@ -334,7 +338,12 @@
                 <div class="download-buttons">
                     <a href="https://chromewebstore.google.com/detail/timemachine/hjkicompionnablkpkgnplnacnnchjij"
                         class="btn btn-primary btn-large" target="_blank">
-                        <img src="assets/chrome-icon.svg" alt="Chrome" class="btn-icon">
+                        <span class="btn-icon">
+                            <div class="icon">
+                                <div class="arrow"></div>
+                                <svg class="line" viewBox="0 0 24 24"></svg>
+                            </div>
+                        </span>
                         Install TimeMachine
                         <span class="btn-subtitle">Chrome Web Store</span>
                     </a>
@@ -345,12 +354,12 @@
                             <span class="info-value">1.6.0</span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">Size:</span>
-                            <span class="info-value">178KB</span>
-                        </div>
-                        <div class="info-item">
                             <span class="info-label">Rating:</span>
                             <span class="info-value">5.0★ (4 reviews)</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Size:</span>
+                            <span class="info-value">178KB</span>
                         </div>
                     </div>
                 </div>

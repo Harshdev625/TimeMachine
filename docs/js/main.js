@@ -452,3 +452,90 @@ style.textContent = `
 `;
 
 document.head.appendChild(style);
+
+document.querySelectorAll('.btn').forEach(button => {
+  const icon = button.querySelector('.icon');
+  if (!icon) return;
+  const line = icon.querySelector('.line');
+  const svgPath = new Proxy({ y: null }, {
+    set(target, key, value) {
+      target[key] = value;
+      if (target.y !== null) {
+        line.innerHTML = getPath(target.y, .25);
+      }
+      return true;
+    }
+  });
+
+  svgPath.y = 12;
+
+  const tl = gsap.timeline({ paused: true });
+  tl.to(icon, {
+    '--arrow-y': 6,
+    '--arrow-rotate': 150,
+    ease: "elastic.in(1.1, .8)",
+    duration: .7,
+    onComplete() { particles(icon, 6, 10, 18, -60, -120); }
+  }).to(icon, {
+    '--arrow-y': 0,
+    '--arrow-rotate': 135,
+    ease: "elastic.out(1.1, .8)",
+    duration: .7
+  });
+
+  tl.to(svgPath, { y: 15, duration: .15 }, .65)
+    .to(svgPath, { y: 12, ease: "elastic.out(1.2, .7)", duration: .6 }, .8);
+
+  let interval;
+  button.addEventListener('mouseover', () => {
+    tl.restart();
+    interval = setInterval(() => tl.restart(), 1500);
+  });
+  button.addEventListener('mouseout', () => clearInterval(interval));
+
+  window.addEventListener('load', () => {
+    tl.restart();
+    setInterval(() => tl.restart(), 1500); // repeat every 1.5s
+    });
+
+
+  function getPath(update, smoothing) {
+    const points = [[5, 12], [12, update], [19, 12]];
+    const d = points.reduce((acc, point, i, a) =>
+      i === 0 ? `M ${point[0]},${point[1]}` : `${acc} ${getPoint(point, i, a, smoothing)}`, '');
+    return `<path d="${d}" />`;
+  }
+
+  function getPoint(point, i, a, smoothing) {
+    const cp = (current, previous, next, reverse) => {
+      const p = previous || current;
+      const n = next || current;
+      const o = {
+        length: Math.sqrt(Math.pow(n[0] - p[0], 2) + Math.pow(n[1] - p[1], 2)),
+        angle: Math.atan2(n[1] - p[1], n[0] - p[0])
+      };
+      const angle = o.angle + (reverse ? Math.PI : 0);
+      const length = o.length * smoothing;
+      return [current[0] + Math.cos(angle) * length, current[1] + Math.sin(angle) * length];
+    };
+    const cps = cp(a[i - 1], a[i - 2], point, false);
+    const cpe = cp(point, a[i - 1], a[i + 1], true);
+    return `C ${cps[0]},${cps[1]} ${cpe[0]},${cpe[1]} ${point[0]},${point[1]}`;
+  }
+
+  function particles(parent, quantity, x, y, minAngle, maxAngle) {
+    const minScale = .07, maxScale = .5;
+    for (let i = quantity - 1; i >= 0; i--) {
+      const angle = minAngle + Math.random() * (maxAngle - minAngle);
+      const scale = minScale + Math.random() * (maxScale - minScale);
+      const velocity = 12 + Math.random() * (80 - 60);
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      parent.appendChild(dot);
+      gsap.set(dot, { opacity: 1, x, y, scale });
+      gsap.timeline({ onComplete: () => dot.remove() })
+        .to(dot, 1.2, { physics2D: { angle, velocity, gravity: 20 } })
+        .to(dot, .4, { opacity: 0 }, .8);
+    }
+  }
+});
