@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { id: 'lottie-block', path: 'assets/lottie/block.json' },
         { id: 'lottie-report', path: 'assets/lottie/report.json' },
         { id: 'lottie-palette', path: 'assets/lottie/palette.json' },
-        { id: 'lottie-privacy', path: 'assets/lottie/privacy.json' }
+        { id: 'lottie-privacy', path: 'assets/lottie/Privacy.json' }
     ];
 
     lottieAnimations.forEach(a => {
@@ -67,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Track feature interaction
             const feature = this.dataset.feature;
-            console.log('Feature viewed:', feature);
             
             // You can add analytics tracking here
             if (typeof gtag !== 'undefined') {
@@ -134,8 +133,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const downloadBtns = document.querySelectorAll('a[href*="chromewebstore"]');
     downloadBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            // Track download click event
-            console.log('Download button clicked');
             
             // You can add Google Analytics or other tracking here
             if (typeof gtag !== 'undefined') {
@@ -177,7 +174,6 @@ document.addEventListener('DOMContentLoaded', function() {
             this.bindEvents();
             this.updateCarousel();
             this.startAutoplay();
-            console.log('Carousel initialized with', this.totalSlides, 'slides');
         },
 
         setupInfiniteLoop() {
@@ -269,8 +265,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 this.isAnimating = false;
             }
-
-            console.log('Moved to slide', this.getRealSlideIndex() + 1);
         },
 
         getRealSlideIndex() {
@@ -338,6 +332,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize carousel
     carousel.init();
+
+    // Get the button elements from the HTML
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    const scrollBottomBtn = document.getElementById('scrollBottomBtn');
+
+    // Function to handle the visibility of both scroll buttons
+    const handleScrollButtons = () => {
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
+        const scrollPosition = window.scrollY;
+
+        // --- Scroll to Top Button Logic ---
+        // Show the button if user has scrolled down more than 300px
+        if (scrollPosition > 300) {
+            scrollTopBtn.classList.add('visible');
+        } else {
+            scrollTopBtn.classList.remove('visible');
+        }
+
+        // --- Scroll to Bottom Button Logic ---
+        // Show the button if user is near the top, but hide it when they get close to the bottom
+        const isNearBottom = scrollPosition + clientHeight >= scrollHeight - 300;
+        if (scrollPosition > 100 && !isNearBottom) {
+            scrollBottomBtn.classList.add('visible');
+        } else {
+            scrollBottomBtn.classList.remove('visible');
+        }
+    };
+
+    // --- Click Event Listeners ---
+    
+    // Smoothly scroll to the top of the page
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Smoothly scroll to the bottom of the page
+    scrollBottomBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+
+    // Add a scroll event listener to the window to check button visibility
+    window.addEventListener('scroll', handleScrollButtons);
+
+    // Initial check when the page loads
+    handleScrollButtons();
 });
 
 // Add some CSS classes for enhanced animations
@@ -400,6 +446,14 @@ style.textContent = `
 `;
 
 document.head.appendChild(style);
+
+// Register GSAP Plugin
+if (window.gsap && window.Physics2DPlugin) {
+  gsap.registerPlugin(Physics2DPlugin);
+} else if (window.gsap) {
+  // Fallback: If Physics2DPlugin is not available, create a simple fallback
+  console.warn('Physics2DPlugin not available, using fallback animation');
+}
 
 document.querySelectorAll('.btn').forEach(button => {
   const icon = button.querySelector('.icon');
@@ -481,9 +535,21 @@ document.querySelectorAll('.btn').forEach(button => {
       dot.className = 'dot';
       parent.appendChild(dot);
       gsap.set(dot, { opacity: 1, x, y, scale });
-      gsap.timeline({ onComplete: () => dot.remove() })
-        .to(dot, 1.2, { physics2D: { angle, velocity, gravity: 20 } })
-        .to(dot, .4, { opacity: 0 }, .8);
+      
+      // Use physics2D if available, otherwise fallback to simple animation
+      if (window.Physics2DPlugin && gsap.plugins.physics2D) {
+        gsap.timeline({ onComplete: () => dot.remove() })
+          .to(dot, 1.2, { physics2D: { angle, velocity, gravity: 20 } })
+          .to(dot, .4, { opacity: 0 }, .8);
+      } else {
+        // Fallback animation without physics2D
+        const radians = angle * Math.PI / 180;
+        const endX = x + Math.cos(radians) * velocity * 2;
+        const endY = y + Math.sin(radians) * velocity * 2;
+        gsap.timeline({ onComplete: () => dot.remove() })
+          .to(dot, 1.2, { x: endX, y: endY, ease: "power2.out" })
+          .to(dot, .4, { opacity: 0 }, .8);
+      }
     }
   }
 });
