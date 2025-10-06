@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { id: 'lottie-block', path: 'assets/lottie/block.json' },
         { id: 'lottie-report', path: 'assets/lottie/report.json' },
         { id: 'lottie-palette', path: 'assets/lottie/palette.json' },
-        { id: 'lottie-privacy', path: 'assets/lottie/privacy.json' }
+        { id: 'lottie-privacy', path: 'assets/lottie/Privacy.json' }
     ];
 
     lottieAnimations.forEach(a => {
@@ -453,6 +453,14 @@ style.textContent = `
 
 document.head.appendChild(style);
 
+// Register GSAP Plugin
+if (window.gsap && window.Physics2DPlugin) {
+  gsap.registerPlugin(Physics2DPlugin);
+} else if (window.gsap) {
+  // Fallback: If Physics2DPlugin is not available, create a simple fallback
+  console.warn('Physics2DPlugin not available, using fallback animation');
+}
+
 document.querySelectorAll('.btn').forEach(button => {
   const icon = button.querySelector('.icon');
   if (!icon) return;
@@ -533,9 +541,21 @@ document.querySelectorAll('.btn').forEach(button => {
       dot.className = 'dot';
       parent.appendChild(dot);
       gsap.set(dot, { opacity: 1, x, y, scale });
-      gsap.timeline({ onComplete: () => dot.remove() })
-        .to(dot, 1.2, { physics2D: { angle, velocity, gravity: 20 } })
-        .to(dot, .4, { opacity: 0 }, .8);
+      
+      // Use physics2D if available, otherwise fallback to simple animation
+      if (window.Physics2DPlugin && gsap.plugins.physics2D) {
+        gsap.timeline({ onComplete: () => dot.remove() })
+          .to(dot, 1.2, { physics2D: { angle, velocity, gravity: 20 } })
+          .to(dot, .4, { opacity: 0 }, .8);
+      } else {
+        // Fallback animation without physics2D
+        const radians = angle * Math.PI / 180;
+        const endX = x + Math.cos(radians) * velocity * 2;
+        const endY = y + Math.sin(radians) * velocity * 2;
+        gsap.timeline({ onComplete: () => dot.remove() })
+          .to(dot, 1.2, { x: endX, y: endY, ease: "power2.out" })
+          .to(dot, .4, { opacity: 0 }, .8);
+      }
     }
   }
 });
