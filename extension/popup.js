@@ -69,38 +69,36 @@ function getElements(selector) {
 }
 
 async function signInWithGoogle() {
-  try {
-    const redirectUri = chrome.identity.getRedirectURL('oauth2');
-    console.log(redirectUri);
-    const clientId = '<Google auth client ID>';
-    const scope = encodeURIComponent('openid email profile');
-    const nonce = Math.random().toString(36).slice(2);
-    const state = Math.random().toString(36).slice(2);
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(clientId)}&response_type=id_token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&nonce=${encodeURIComponent(nonce)}&state=${encodeURIComponent(state)}&prompt=select_account`;
-    const responseUrl = await new Promise((resolve, reject) => {
-      chrome.identity.launchWebAuthFlow({ url: authUrl, interactive: true }, redirectUrl => {
-        if (chrome.runtime.lastError) return reject(new Error(chrome.runtime.lastError.message));
-        if (!redirectUrl) return reject(new Error('No redirect URL returned'));
-        resolve(redirectUrl);
-      });
+  return new Promise((resolve, reject) => {
+    chrome.identity.getAuthToken({ interactive: true }, async (token) => {
+      if (chrome.runtime.lastError || !token) {
+        console.error('auth token error:', chrome.runtime.lastError);
+        return reject(new Error('Failed to get Google auth token'));
+      }
+      try {
+        // Send id token (or access token) to your backend
+        const backendUrl = await resolveBackendUrl();
+        const resp = await fetch(`${backendUrl}/api/auth/google`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken: token })
+        });
+        const data = await resp.json();
+        if (!resp.ok || !data.token) throw new Error(data.error || 'Google auth failed');
+        await TokenStorage.setToken(data.token, data.email);
+        window.__TM_AUTH_CACHE__ = { last: Date.now(), ok: true };
+        // Notify success
+        await chrome.storage.local.set({ [STORAGE_KEYS.USER_EMAIL]: data.email });
+        document.dispatchEvent(new CustomEvent('tm-auth-success', { detail: { email: data.email } }));
+        document.getElementById('emailPrompt').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+        resolve(data);
+      } catch (err) {
+        console.error('Google login backend error:', err);
+        reject(err);
+      }
     });
-    const url = new URL(responseUrl);
-    const idToken = url.hash.match(/id_token=([^&]+)/)?.[1];
-    if (!idToken) throw new Error('Google sign-in failed: no id_token');
-    const success = await Auth.loginWithGoogle(decodeURIComponent(idToken));
-    if (!success) throw new Error('Google sign-in failed');
-    const { email } = await TokenStorage.getToken();
-    await chrome.storage.local.set({ userEmail: email });
-    getElement(ELEMENTS.emailPrompt).classList.add('hidden');
-    getElement(ELEMENTS.mainApp).classList.remove('hidden');
-    showToast('Signed in with Google!');
-    updateEmailUI(email);
-    switchMainTab('analytics');
-    document.dispatchEvent(new CustomEvent('tm-auth-success', { detail: { email } }));
-  } catch (error) {
-    console.error('Google sign-in error:', error);
-    showError(error.message || 'Google sign-in failed', ELEMENTS.emailError);
-  }
+  });
 }
 
 async function resolveBackendUrl() {

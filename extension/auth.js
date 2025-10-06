@@ -87,23 +87,6 @@ const authRequest = async (type, email, password) => {
   }
 };
 
-// Google OAuth login
-async function loginWithGoogle(idToken) {
-  const backendUrl = await resolveBackendUrl();
-  const res = await fetch(`${backendUrl}/api/auth/google`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ idToken })
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.message || data.error || 'Google login failed');
-  if (!data.token || !data.email) throw new Error('Invalid Google login response');
-  await TokenStorage.setToken(data.token, data.email);
-  window.__TM_AUTH_CACHE__ = { last: Date.now(), ok: true };
-  try { chrome.runtime.sendMessage({ action: 'triggerImmediateSync' }); } catch {}
-  return true;
-}
-
 // Check authentication status
 const isAuthenticated = async () => {
   window.__TM_AUTH_CACHE__ = window.__TM_AUTH_CACHE__ || { last: 0, ok: false };
@@ -183,7 +166,7 @@ const resolveBackendUrl = async () => {
       } catch {}
     }
   } catch {}
-  const renderBase = 'https://timemachine-1.onrender.com';
+  const renderBase = 'http://localhost:3000';
   try {
     const controller = new AbortController();
     setTimeout(() => controller.abort(), 2000);

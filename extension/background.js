@@ -9,6 +9,13 @@ let blockedSites = new Map();
 let blockedKeywords = new Map();
 let _backendCache = null;
 
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.action === 'triggerImmediateSync' || msg.action === 'authSuccess') {
+    sendResponse({ ok: true }); // prevents the runtime.lastError warning
+  }
+  return true;
+});
+
 async function resolveBackendUrl() {
   if (_backendCache) return _backendCache;
   try {

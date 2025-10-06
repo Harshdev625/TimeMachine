@@ -99,41 +99,56 @@ router.post('/login', async (req, res) => {
 });
 
 // Google OAuth login: exchange Google ID token for our JWT
-router.post('/google', async (req, res) => {
+// Google OAuth login: exchange Google ID token for our JWT
+router.post("/google", async (req, res) => {
   try {
     const { idToken } = req.body;
-    if (!idToken) return sendBadRequest(res, 'idToken is required');
+    console.log("Received token:", idToken);
 
-    const ticket = await googleClient.verifyIdToken({ idToken, audience: GOOGLE_CLIENT_ID });
-    const payload = ticket.getPayload();
-    const email = payload?.email;
-    if (!email) return sendBadRequest(res, 'Email not found in Google token');
+    if (!idToken) return res.status(400).json({ error: "idToken is required" });
 
-    let user = await User.findOne({ email: normalizeEmail(email) }).select('+password');
+    // Verify token
+    const ticket = await googleClient.getTokenInfo(idToken);
+    const payload = ticket;
+    console.log("Verified Google payload:", payload);
+
+    // Find or create user
+    let user = await User.findOne({ email: payload.email });
+
     if (!user) {
-      // Create a user with a random password (not used for Google auth)
-      const randomPassword = uuidv4();
-      const hashedPassword = await bcrypt.hash(randomPassword, BCRYPT_ROUNDS);
       user = new User({
-        email: normalizeEmail(email),
-        password: hashedPassword,
-        role: 'user',
-        settings: { receiveReports: true, reportFrequency: 'weekly', categories: new Map() },
-        lastActive: new Date()
+        email: payload.email,
+        isGoogleUser: true,
+        password: null, // skip password for Google users
+        lastActive: new Date(),
+        settings: {
+          receiveReports: true,
+          reportFrequency: "weekly",
+          categories: new Map(),
+        },
       });
-      await user.save();
-    } else {
-      user.lastActive = new Date();
-      await user.save();
+      await user.save({ validateBeforeSave: false });
     }
 
+    // Issue JWT like normal login
     const token = issueToken(user);
-    res.status(200).json({ message: 'Login successful', token, email: user.email });
-  } catch (error) {
-    console.error('Google auth error:', error);
-    res.status(401).json({ error: 'Invalid Google token', details: error.message });
+
+    res.json({
+      success: true,
+      token,
+      email: user.email,
+      user: {
+        email: user.email,
+        role: user.role,
+        timezone: user.timezone,
+      },
+    });
+  } catch (err) {
+    console.error("Google Auth Error:", err);
+    res.status(500).json({ error: "Google auth failed" });
   }
 });
+
 
 // Debug endpoint to list current User schema paths (dev only)
 router.get('/debug-schema', async (req, res) => {
