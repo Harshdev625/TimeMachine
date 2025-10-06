@@ -104,11 +104,11 @@ const isAuthenticated = async () => {
       window.__TM_AUTH_CACHE__ = { last: Date.now(), ok: true };
       return true;
     }
-    // if (res.status === 429) {
-    //   console.warn('Token verification rate-limited');
-    //   window.__TM_AUTH_CACHE__ = { last: Date.now(), ok: true };
-    //   return true;
-    // }
+    if (res.status === 429) {
+      console.warn('Token verification rate-limited');
+      window.__TM_AUTH_CACHE__ = { last: Date.now(), ok: true };
+      return true;
+    }
     const data = res.headers.get('content-type')?.includes('application/json') ? await res.json().catch(() => ({})) : { message: await res.text().catch(() => '') };
     console.warn('Token verification failed:', data || { status: res.status });
     if (data?.code === 'TOKEN_EXPIRED' || data?.code === 'INVALID_TOKEN') await TokenStorage.clearToken();
@@ -166,7 +166,7 @@ const resolveBackendUrl = async () => {
       } catch {}
     }
   } catch {}
-  const renderBase = 'http://localhost:3000';
+  const renderBase = 'https://timemachine-1.onrender.com';
   try {
     const controller = new AbortController();
     setTimeout(() => controller.abort(), 2000);
