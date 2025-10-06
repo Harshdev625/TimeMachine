@@ -513,9 +513,9 @@ body {
 }
 
 .lottie-animation {
-    width: 80px;
     /* adjust as needed */
-    height: 80px;
+    height: 90px;
+    width: 90px;
     margin: 0 auto;
 }
 
@@ -881,21 +881,30 @@ body {
 }
 
 .download-buttons {
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-4);
+    text-align: center;
+}
+
+.download-buttons .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
 }
 
 .download-info {
     display: flex;
     justify-content: center;
-    gap: var(--space-6);
     margin-bottom: var(--space-8);
+    margin-top: var(--space-4);
     font-size: var(--font-size-sm);
 }
 
 .info-item {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    width: 120px;
+    max-width: 120px;
+    text-align: center;
 }
 
 .info-label {
@@ -929,6 +938,82 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 12px;
+}
+
+/* Animated SVG Icon inside Chrome Install Button */
+.btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+}
+
+.icon {
+    --arrow-y: 0;
+    --arrow-rotate: 135;
+    --arrow-top: 10px;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    pointer-events: none;
+}
+
+.icon .dot {
+    border-radius: 50%;
+    background: #fff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 4px;
+}
+
+.icon .arrow,
+.icon .line {
+    position: absolute;
+    z-index: 1;
+}
+
+.icon .arrow {
+    left: 11px;
+    top: 4px;
+    width: 2px;
+    height: 12px;
+    border-radius: 1px;
+    background: #fff;
+    transform: translateY(calc(var(--arrow-y) * 1px)) translateZ(0);
+}
+
+.icon .arrow:before,
+.icon .arrow:after {
+    content: "";
+    width: 2px;
+    height: 7px;
+    position: absolute;
+    left: 0;
+    top: var(--arrow-top);
+    border-radius: 1px;
+    background: inherit;
+    transform-origin: 1px 1px;
+    transform: rotate(var(--r, calc(var(--arrow-rotate) * 1deg)));
+}
+
+.icon .arrow:after {
+    --r: calc(var(--arrow-rotate) * -1deg);
+}
+
+.icon .line {
+    width: 24px;
+    height: 24px;
+    left: 0;
+    top: 7px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
 }
 
 /* Footer */
