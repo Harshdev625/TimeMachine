@@ -19,10 +19,11 @@
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Available-brightgreen?logo=googlechrome)](https://chromewebstore.google.com/detail/timemachine/hjkicompionnablkpkgnplnacnnchjij)
 [![Version](https://img.shields.io/badge/version-1.6.0-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Contributors](https://img.shields.io/github/contributors/Harshdev625/TimeMachine)](https://github.com/Harshdev625/TimeMachine/graphs/contributors)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Hacktoberfest](https://img.shields.io/badge/Hacktoberfest-2025-orange)](https://hacktoberfest.com/)
 
-[Getting Started](#quick-start)  [Features](#features)  [Documentation](#documentation)  [Contributing](CONTRIBUTING.md)  [Changelog](CHANGELOG.md)
+[Overview](#📖-overview) • [Features](#✨-features) • [Quick Start](#🚀-quick-start) • [Tech Stack](#🛠️-tech-stack) • [Contributing](#🤝-contributing) • [Contributors](#👥-contributors)
 
 </div>
 
@@ -390,27 +391,32 @@ Configure automated email reports using EmailJS:
 
 ## 🤝 Contributing
 
-We welcome contributions from the community! TimeMachine is open-source and thrives on collaboration.
+We welcome contributions from the community! Here's how you can help make TimeMachine better:
 
-### 📝 How to Contribute
+### 🚀 Quick Start
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes and test thoroughly
+4. Commit your changes (`git commit -m 'Add amazing feature'`)
+5. Push to the branch (`git push origin feature/amazing-feature`)
+6. Open a Pull Request
 
-1. **Fork the repository**
-2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
-3. **Make your changes**
-   - Follow existing code style
-   - Add comments for complex logic
-   - Test thoroughly
-4. **Commit your changes** (`git commit -m 'Add amazing feature'`)
-5. **Push to branch** (`git push origin feature/amazing-feature`)
-6. **Open a Pull Request**
-
-### 📋 Contribution Guidelines
-
+### 📋 Guidelines
 - Read [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines
 - Follow our [Code of Conduct](CODE_OF_CONDUCT.md)
 - Check existing issues before creating new ones
 - Include screenshots for UI changes
-- Update documentation as needed
+- Test your changes locally
+
+### 🎯 Ways to Contribute
+- 🐛 **Bug fixes** - Help us squash bugs
+- ✨ **New features** - Add cool functionality
+- 📚 **Documentation** - Improve guides and docs
+- 🎨 **UI/UX** - Make it more beautiful and user-friendly
+- 🧪 **Testing** - Help us maintain quality
+
+### 🎃 Hacktoberfest
+We're participating in Hacktoberfest 2025! Look for issues labeled `hacktoberfest` and join the fun.
 
 ## 🔒 Security
 
@@ -458,10 +464,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Contributors
 
-Thanks to all the amazing people who have contributed to TimeMachine! 🎉
-
 <a href="https://github.com/Harshdev625/TimeMachine/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Harshdev625/TimeMachine" />
+  <img src="https://contrib.rocks/image?repo=Harshdev625/TimeMachine" alt="Contributors" />
 </a>
 
 ---

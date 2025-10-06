@@ -191,7 +191,6 @@ router.post('/reset-password-request', async (req, res) => {
     user.resetToken = resetToken;
     user.resetTokenExpires = resetTokenExpires;
     await user.save();
-    
     res.status(200).json({ message: 'Password reset link sent' });
   } catch (error) {
     console.error('Password reset request error:', error);

@@ -412,6 +412,12 @@ Supports Chrome extension origins:
    npm run dev
    ```
 
+5. ### Run with Docker
+
+```bash
+docker compose up --build
+```
+
 ### Verification
 
 After starting the server, verify it's working:

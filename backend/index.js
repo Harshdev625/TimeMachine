@@ -76,6 +76,7 @@ const focusSessionRoutes = require('./routes/focusSessions');
 const blockedSitesRoutes = require('./routes/blockedSites');
 const blockedKeywordsRoutes = require('./routes/blockedKeywords');
 const problemSessionRoutes = require('./routes/problemSessions');
+const mailRoutes = require('./routes/mail');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/time-data', authenticateToken, timeDataRoutes);
@@ -85,6 +86,7 @@ app.use('/api/focus-sessions', authenticateToken, focusSessionRoutes);
 app.use('/api/blocked-sites', authenticateToken, blockedSitesRoutes);
 app.use('/api/blocked-keywords', authenticateToken, blockedKeywordsRoutes);
 app.use('/api/problem-sessions', authenticateToken, problemSessionRoutes);
+app.use('/api/mail',authenticateToken, mailRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
