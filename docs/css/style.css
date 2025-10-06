@@ -513,11 +513,14 @@ body {
 }
 
 .lottie-animation {
-    width: 80px;
-    /* adjust as needed */
-    height: 80px;
+    width: 90px;
+    height: 90px;
     margin: 0 auto;
 }
+#lottie-privacy {
+    width: 100px;
+    height: 100px;
+} 
 
 /* Screenshots Section */
 .screenshots {
@@ -890,6 +893,17 @@ body {
     gap: var(--space-6);
     margin-bottom: var(--space-8);
     font-size: var(--font-size-sm);
+}
+.download .btn-primary.btn-large {
+    background: linear-gradient(135deg, #1e293b 0%, #3b82f6 50%, #7c3aed 100%);
+    color: #f8fafc;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 1.2rem 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 114, 255, 0.35);
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
 }
 
 .info-item {
