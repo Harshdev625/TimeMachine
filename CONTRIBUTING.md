@@ -9,8 +9,8 @@ This repo contains two parts:
 We aim for small, focused pull requests with clear descriptions and screenshots for UI changes.
 
 ## Quicklinks
-- Code of Conduct: (CODE_OF_CONDUCT.md)[/CODE_OF_CONDUCT.md]
-- Security: (SECURITY.md)[/SECURITY.md]
+- Code of Conduct: /CODE_OF_CONDUCT.md
+- Security: /SECURITY.md
 - Open Issues: https://github.com/HarshDev625/TimeMachine/issues
 - Good First Issues: https://github.com/HarshDev625/TimeMachine/labels/good%20first%20issue
 - Hacktoberfest Issues: https://github.com/HarshDev625/TimeMachine/labels/hacktoberfest
