@@ -67,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Track feature interaction
             const feature = this.dataset.feature;
-            console.log('Feature viewed:', feature);
             
             // You can add analytics tracking here
             if (typeof gtag !== 'undefined') {
@@ -134,9 +133,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const downloadBtns = document.querySelectorAll('a[href*="chromewebstore"]');
     downloadBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            // Track download click event
-            console.log('Download button clicked');
-            
             // You can add Google Analytics or other tracking here
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'click', {
@@ -177,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function() {
             this.bindEvents();
             this.updateCarousel();
             this.startAutoplay();
-            console.log('Carousel initialized with', this.totalSlides, 'slides');
         },
 
         setupInfiniteLoop() {
@@ -270,7 +265,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.isAnimating = false;
             }
 
-            console.log('Moved to slide', this.getRealSlideIndex() + 1);
         },
 
         getRealSlideIndex() {
