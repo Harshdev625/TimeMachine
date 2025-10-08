@@ -465,7 +465,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👥 Contributors
 
 <a href="https://github.com/Harshdev625/TimeMachine/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Harshdev625/TimeMachine" alt="Contributors" />
+  <img src="https://contrib.rocks/image?repo=Harshdev625/TimeMachine&max=500&columns=20" alt="Contributors" />
 </a>
 
 ---
