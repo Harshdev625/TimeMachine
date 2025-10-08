@@ -512,6 +512,47 @@ body {
     margin: 0 auto;
 }
 
+.about-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.about-card {
+    background: var(--surface-elevated, #1e293b);
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow, 0 4px 6px rgba(0,0,0,0.1));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.about-card .lottie-animation {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1rem;
+}
+
+.about-card .card-content h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.about-card .card-content p {
+    font-size: 0.9rem;
+    color: #cbd5e1; 
+    text-align: center;
+}
+
 /* Screenshots Section */
 .screenshots {
     padding-top: var(--space-12);

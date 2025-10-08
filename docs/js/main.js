@@ -36,8 +36,10 @@ document.addEventListener('DOMContentLoaded', function() {
         { id: 'lottie-block', path: 'assets/lottie/block.json' },
         { id: 'lottie-report', path: 'assets/lottie/report.json' },
         { id: 'lottie-palette', path: 'assets/lottie/palette.json' },
-        { id: 'lottie-privacy', path: 'assets/lottie/Privacy.json' }
-    ];
+        { id: 'lottie-privacy', path: 'assets/lottie/Privacy.json' },
+        { id: 'lottie-notifications', path: 'assets/lottie/notifications.json' },  // New
+    { id: 'lottie-shortcuts', path: 'assets/lottie/shortcuts.json' },          // New
+];
 
     lottieAnimations.forEach(a => {
         const el = document.getElementById(a.id);
