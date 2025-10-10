@@ -190,5 +190,5 @@ const resolveBackendUrl = async () => {
   return renderBase;
 };
 
-window.Auth = { authenticateUser, login, signup, logout, isAuthenticated, loginWithGoogle };
+window.Auth = { authenticateUser, login, signup, logout, isAuthenticated };
 try { window.TokenStorage = TokenStorage; } catch {}

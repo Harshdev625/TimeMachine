@@ -14,7 +14,7 @@ if (!JWT_SECRET) throw new Error('JWT_SECRET environment variable is required');
 if (!BCRYPT_ROUNDS || isNaN(BCRYPT_ROUNDS)) throw new Error('BCRYPT_ROUNDS environment variable is required and must be a number');
 
 // Google OAuth
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '<Google auth client ID>';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 // Unified response helpers
@@ -119,7 +119,6 @@ router.post("/google", async (req, res) => {
       user = new User({
         email: payload.email,
         isGoogleUser: true,
-        password: null, // skip password for Google users
         lastActive: new Date(),
         settings: {
           receiveReports: true,
@@ -127,7 +126,7 @@ router.post("/google", async (req, res) => {
           categories: new Map(),
         },
       });
-      await user.save({ validateBeforeSave: false });
+      await user.save();
     }
 
     // Issue JWT like normal login

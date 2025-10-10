@@ -12,16 +12,14 @@
     "alarms",
     "idle",
     "windows",
-    "notifications",
-    "https://accounts.google.com/*"
+    "notifications"
   ],
   "oauth2": {
     "client_id": "<google client id>",
     "scopes": [
       "openid",
       "email",
-      "profile",
-      "https://www.googleapis.com/auth/contacts.readonly"
+      "profile"
     ]
   },
   "host_permissions": [
