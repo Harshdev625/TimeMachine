@@ -1,46 +1,43 @@
-const heroCard = document.querySelector('.hero-card');
-const cardGlow = heroCard.querySelector('.card-glow');
-
-heroCard.addEventListener('mousemove', (e) => {
-    const rect = heroCard.getBoundingClientRect();
-    const cardCenterX = rect.left + rect.width / 2;
-    const cardCenterY = rect.top + rect.height / 2;
-
-    const deltaX = e.clientX - cardCenterX;
-    const deltaY = e.clientY - cardCenterY;
-
-    const moveX = -deltaX * 0.6;
-    const moveY = -deltaY * 0.6;
-
-    const glowX = deltaX * 0.03;
-    const glowY = deltaY * 0.03;
-
-    heroCard.style.transform = `translateX(calc(-80px + ${moveX}px)) translateY(${moveY}px) scale(0.97) rotateY(-8deg)`;
-
-   
-    cardGlow.style.transform = `translate(calc(-50% + ${glowX}px), calc(-50% + ${glowY}px))`;
-});
-
-heroCard.addEventListener('mouseleave', () => {
-    heroCard.style.transform = 'translateX(0px) translateY(0px) scale(1) rotateY(0deg)';
-    cardGlow.style.transform = 'translate(-50%, -50%)';
-});
-
-
 document.addEventListener('DOMContentLoaded', function () {
-    // Mobile menu toggle
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
+     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+  const navLinks = document.querySelector('.nav-links');
 
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function () {
-            navLinks.classList.toggle('active');
-            mobileMenuBtn.classList.toggle('active');
-        });
-    }
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      mobileMenuBtn.classList.toggle('active');
+    });
+  }
+
+  const heroCard = document.querySelector('.hero-card');
+  const cardGlow = heroCard?.querySelector('.card-glow');
+
+  if (heroCard && cardGlow) {
+    heroCard.addEventListener('mousemove', (e) => {
+      const rect = heroCard.getBoundingClientRect();
+      const cardCenterX = rect.left + rect.width / 2;
+      const cardCenterY = rect.top + rect.height / 2;
+      const deltaX = e.clientX - cardCenterX;
+      const deltaY = e.clientY - cardCenterY;
+
+      const moveX = -deltaX * 0.6;
+      const moveY = -deltaY * 0.6;
+
+      const glowX = deltaX * 0.03;
+      const glowY = deltaY * 0.03;
+
+      heroCard.style.transform = `translateX(calc(-80px + ${moveX}px)) translateY(${moveY}px) scale(0.97) rotateY(-8deg)`;
+      cardGlow.style.transform = `translate(calc(-50% + ${glowX}px), calc(-50% + ${glowY}px))`;
+    });
+
+    heroCard.addEventListener('mouseleave', () => {
+      heroCard.style.transform = 'translateX(0px) translateY(0px) scale(1) rotateY(0deg)';
+      cardGlow.style.transform = 'translate(-50%, -50%)';
+    });
+  }
 
 
-    
+
     const navLinksElements = document.querySelectorAll('.nav-link[href^="#"]');
     navLinksElements.forEach(link => {
         link.addEventListener('click', function (e) {
@@ -49,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const targetSection = document.querySelector(targetId);
 
             if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 80; 
+                const offsetTop = targetSection.offsetTop - 80;
                 window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
@@ -58,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    
+
     const lottieAnimations = [
         { id: 'lottie-tracking', path: 'assets/lottie/timeTracker.json' },
         { id: 'lottie-focus', path: 'assets/lottie/target.json' },
@@ -83,34 +80,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-   
-    const screenshotCards = document.querySelectorAll('.screenshot-card');
-
-    screenshotCards.forEach((card, index) => {
-        card.addEventListener('click', function () {
-            
-            this.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 150);
-
-            
-            const feature = this.dataset.feature;
-
-        
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'feature_view', {
-                    event_category: 'Screenshots',
-                    event_label: feature
-                });
-            }
-        });
-
-        
-        card.style.animationDelay = `${index * 0.1}s`;
-    });
-
-    
     const navbar = document.querySelector('.navbar');
 
     function updateNavbar() {
@@ -123,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.addEventListener('scroll', updateNavbar);
 
-    
+
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -137,28 +106,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }, observerOptions);
 
-    
+
     const animateElements = document.querySelectorAll('.feature-card, .screenshot-item, .section-header');
     animateElements.forEach(el => observer.observe(el));
 
-    
+
     const hero = document.querySelector('.hero');
 
-    function parallaxEffect() {
-        const scrolled = window.pageYOffset;
-        const rate = scrolled * -0.05;
 
-        if (hero) {
-            hero.style.transform = `translateY(${rate}px)`;
-        }
-    }
-
-    
-    if (window.innerWidth > 1024) {
-        window.addEventListener('scroll', parallaxEffect);
-    }
-
-    
     const downloadBtns = document.querySelectorAll('a[href*="chromewebstore"]');
     downloadBtns.forEach(btn => {
         btn.addEventListener('click', function () {

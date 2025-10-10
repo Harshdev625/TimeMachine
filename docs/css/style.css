@@ -24,6 +24,10 @@
   --gray-900: #111827;
   --white: #ffffff;
   --black: #000000;
+  --cta-blue: #27D1FE;
+  --cta-blue-dark: #109fff;
+  --cta-glow-blue: #27d1fe88;
+  --cta-yellow: #FFD600;
   /* Typography */
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-size-xs: 0.75rem;
@@ -35,6 +39,8 @@
   --font-size-3xl: 1.875rem;
   --font-size-4xl: 2.25rem;
   --font-size-5xl: 3rem;
+  --font-body: 'Poppins', sans-serif;
+  --font-heading: 'Poppins', sans-serif;
   /* Spacing */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -64,6 +70,9 @@
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
   --transition-slow: 350ms ease;
+  /* btns */
+  --btn-gradient-start: #4facfe;
+  --btn-gradient-end: #00f2fe;
 }
 
 body {
@@ -142,10 +151,10 @@ body {
   transition: all 0.3s ease;
 }
 
-/* .navbar.scrolled .logo {
+.navbar.scrolled .logo {
   width: 28px;
   height: 28px;
-} */
+}
 
 .brand-text {
   color: white;
@@ -227,18 +236,11 @@ body {
 
 
 
-:root {
-  --font-body: 'Poppins', sans-serif;
-  --font-heading: 'Poppins', sans-serif;
-  --btn-gradient-start: #4facfe;
-  --btn-gradient-end: #00f2fe;
-}
+
 
 /* Base typography */
 .hero {
   font-family: var(--font-body);
-  transform: none !important;
-  will-change: auto;
   color: white;
   padding: 6rem 1rem 4rem;
   background: black;
@@ -297,13 +299,7 @@ body {
   animation: fadeUp 1s forwards ease-out 0.8s;
 }
 
-:root {
-  --cta-blue: #27D1FE;
-  --cta-blue-dark: #109fff;
-  --cta-glow-blue: #27d1fe88;
-  --cta-yellow: #FFD600;
-  
-}
+
 
 /* Primary CTA Button */
 .btn-primary {
@@ -705,11 +701,11 @@ body {
 }
 
 .carousel-nav.prev {
-  left: calc(50% - 560px);
+  left: var(--space-6)
 }
 
 .carousel-nav.next {
-  right: calc(50% - 560px);
+  right: var(--space-6)
 }
 
 @media (max-width: 1200px) {
@@ -1466,7 +1462,6 @@ section {
 #scrollBottomBtn {
   bottom: calc(var(--space-5) + 60px);
 }
-
 .scroll-btn svg {
   width: 28px;
   height: 28px;
