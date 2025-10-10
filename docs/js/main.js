@@ -22,12 +22,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
 
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            mobileMenuBtn.classList.toggle('active');
-        });
-    }
+     if (mobileMenuBtn) {
++        mobileMenuBtn.addEventListener('click', () => {
+        if (navLinks) navLinks.classList.toggle('active');
+        mobileMenuBtn.classList.toggle('active');
+    });
+}
 
     const heroCard = document.querySelector('.hero-card');
     const cardGlow = heroCard?.querySelector('.card-glow');
@@ -534,7 +534,7 @@ document.querySelectorAll('.btn').forEach(button => {
         for (let i = quantity - 1; i >= 0; i--) {
             const angle = minAngle + Math.random() * (maxAngle - minAngle);
             const scale = minScale + Math.random() * (maxScale - minScale);
-            const velocity = 12 + Math.random() * (80 - 60);
+            const velocity = 60 + Math.random() * (80 - 60);
             const dot = document.createElement('div');
             dot.className = 'dot';
             parent.appendChild(dot);
