@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
+        if (savedTheme === 'light' || (!savedTheme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
             document.body.classList.add('light-theme');
         }
     }
