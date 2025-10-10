@@ -1,40 +1,60 @@
 document.addEventListener('DOMContentLoaded', function () {
-     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-  const navLinks = document.querySelector('.nav-links');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
 
-  if (mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      mobileMenuBtn.classList.toggle('active');
-    });
-  }
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
 
-  const heroCard = document.querySelector('.hero-card');
-  const cardGlow = heroCard?.querySelector('.card-glow');
+            
+            if (document.body.classList.contains('light-theme')) {
+                localStorage.setItem('theme', 'light');
+            } else {
+                localStorage.setItem('theme', 'dark');
+            }
+        });
 
-  if (heroCard && cardGlow) {
-    heroCard.addEventListener('mousemove', (e) => {
-      const rect = heroCard.getBoundingClientRect();
-      const cardCenterX = rect.left + rect.width / 2;
-      const cardCenterY = rect.top + rect.height / 2;
-      const deltaX = e.clientX - cardCenterX;
-      const deltaY = e.clientY - cardCenterY;
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-theme');
+        }
+    }
 
-      const moveX = -deltaX * 0.6;
-      const moveY = -deltaY * 0.6;
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
 
-      const glowX = deltaX * 0.03;
-      const glowY = deltaY * 0.03;
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+    }
 
-      heroCard.style.transform = `translateX(calc(-80px + ${moveX}px)) translateY(${moveY}px) scale(0.97) rotateY(-8deg)`;
-      cardGlow.style.transform = `translate(calc(-50% + ${glowX}px), calc(-50% + ${glowY}px))`;
-    });
+    const heroCard = document.querySelector('.hero-card');
+    const cardGlow = heroCard?.querySelector('.card-glow');
 
-    heroCard.addEventListener('mouseleave', () => {
-      heroCard.style.transform = 'translateX(0px) translateY(0px) scale(1) rotateY(0deg)';
-      cardGlow.style.transform = 'translate(-50%, -50%)';
-    });
-  }
+    if (heroCard && cardGlow) {
+        heroCard.addEventListener('mousemove', (e) => {
+            const rect = heroCard.getBoundingClientRect();
+            const cardCenterX = rect.left + rect.width / 2;
+            const cardCenterY = rect.top + rect.height / 2;
+            const deltaX = e.clientX - cardCenterX;
+            const deltaY = e.clientY - cardCenterY;
+
+            const moveX = -deltaX * 0.6;
+            const moveY = -deltaY * 0.6;
+
+            const glowX = deltaX * 0.03;
+            const glowY = deltaY * 0.03;
+
+            heroCard.style.transform = `translateX(calc(-80px + ${moveX}px)) translateY(${moveY}px) scale(0.97) rotateY(-8deg)`;
+            cardGlow.style.transform = `translate(calc(-50% + ${glowX}px), calc(-50% + ${glowY}px))`;
+        });
+
+        heroCard.addEventListener('mouseleave', () => {
+            heroCard.style.transform = 'translateX(0px) translateY(0px) scale(1) rotateY(0deg)';
+            cardGlow.style.transform = 'translate(-50%, -50%)';
+        });
+    }
 
 
 

@@ -82,7 +82,19 @@ body {
   color: var(--gray-800);
   background-color: var(--white);
   scroll-behavior: smooth;
+  --bg-color: black;
+  --text-color: white;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
 }
+
+body.light-theme {
+  --bg-color: white;
+  --text-color: black;
+}
+
+
 
 .container {
   max-width: 1200px;
@@ -112,18 +124,17 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);  
 }
 
 /* Shrink and Center on Scroll */
 .navbar.scrolled {
-  background: white;
-  color: black;
   width: 85%;
   padding: 8px 30px;
   top: 15px;
   border-radius: 12px;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+  color: black;
 }
 
 /* Inner Container */
@@ -146,27 +157,25 @@ body {
 }
 
 .logo {
-  width: 32px;
-  height: 32px;
+  width: 55px;
+  height: 50px;
+  border-radius:50%;
   transition: all 0.3s ease;
 }
 
 .navbar.scrolled .logo {
-  width: 28px;
-  height: 28px;
+  width: 55px;
+  height: 50px;
+  border-radius:50%;
 }
 
 .brand-text {
-  color: white;
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
-  font-size: 1.75rem;
+  font-size: 2.1rem;
   letter-spacing: 0.02em;
 }
 
-.navbar.scrolled .brand-text {
-  color: black;
-}
 
 /* Links */
 .nav-link {
@@ -250,6 +259,8 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 600px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .hero-content {
@@ -259,6 +270,7 @@ body {
   gap: 4rem;
   align-items: center;
   z-index: 2;
+  
 }
 
 .hero-title {
@@ -289,6 +301,8 @@ body {
   opacity: 0;
   transform: translateY(20px);
   animation: fadeUp 1s forwards ease-out 0.4s;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .hero-cta {
@@ -426,6 +440,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  
 }
 
 .hero-card {
@@ -534,6 +549,8 @@ body {
   position: relative;
   color: #ddddee;
   font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .features::before {
@@ -570,6 +587,8 @@ body {
     0 4px 12px rgba(40, 50, 255, 0.04),
     inset 0 0 8px rgba(60, 90, 255, 0.08);
   color: #bccced;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .feature-card:hover {
@@ -637,6 +656,8 @@ body {
   max-width: 600px;
   margin: 0 auto;
   font-weight: 500;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 
@@ -649,6 +670,8 @@ body {
   color: #cbd5e1;
   font-family: 'Poppins', sans-serif;
   padding-bottom: 30px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 
@@ -983,6 +1006,8 @@ body {
   color: #f8fafc;
   text-align: center;
   font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .download-title {
@@ -1000,6 +1025,8 @@ body {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .download-buttons {
@@ -1021,6 +1048,8 @@ body {
   margin-top: var(--space-4);
   font-size: var(--font-size-sm);
   color: #d7defb;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .info-item {
@@ -1029,6 +1058,8 @@ body {
   width: 120px;
   max-width: 120px;
   text-align: center;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .info-label {
@@ -1038,7 +1069,11 @@ body {
 
 .info-value {
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 0.85rem;
+}
+.info-value-1{
+  font-weight: 700;
+  font-size: 0.85rem;
 }
 
 .download-features {
@@ -1048,6 +1083,8 @@ body {
   flex-wrap: wrap;
   color: #d3defa;
   font-weight: 500;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 .feature-check {
@@ -1072,20 +1109,41 @@ body {
 }
 
 
-/* Animated SVG Icon inside Download Button */
-.btn-icon {
+.btn-primary.btn-large {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-right: 8px;
+  gap: 0.25rem;
+  text-align: center;
+  padding: 1rem 2rem;
+  width: max-content; 
+  min-width: 0;
+  border-radius: 0.75rem; 
+  cursor: pointer;
+  margin: auto;
 }
+
+.btn-icon {
+  display: block;
+  margin: 0;
+  
+}
+
+.btn-subtitle {
+  font-size: 0.85rem;
+  color: #939393;
+  margin-top: 0.25rem;
+  font-weight: 200;
+}
+
 
 .icon {
   --arrow-y: 0;
   --arrow-rotate: 135;
-  --arrow-top: 10px;
-  width: 24px;
-  height: 24px;
+  --arrow-top: 25px;
+  width: 48px;
+  height: 48px;
   position: relative;
   display: inline-block;
   vertical-align: top;
@@ -1098,8 +1156,8 @@ body {
   position: absolute;
   left: 0;
   top: 0;
-  width: 4px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
 }
 
 .icon .arrow,
@@ -1109,10 +1167,10 @@ body {
 }
 
 .icon .arrow {
-  left: 11px;
-  top: 4px;
-  width: 2px;
-  height: 12px;
+  left: 22px;
+  top: 8px;
+  width: 4px;
+  height: 24px;
   border-radius: 1px;
   background: #fff;
   transform: translateY(calc(var(--arrow-y) * 1px)) translateZ(0);
@@ -1121,14 +1179,14 @@ body {
 .icon .arrow:before,
 .icon .arrow:after {
   content: "";
-  width: 2px;
-  height: 7px;
+  width: 4px;
+  height: 14px;
   position: absolute;
   left: 0;
   top: var(--arrow-top);
   border-radius: 1px;
   background: inherit;
-  transform-origin: 1px 1px;
+  transform-origin: 2px 1px;
   transform: rotate(var(--r, calc(var(--arrow-rotate) * 1deg)));
 }
 
@@ -1137,10 +1195,10 @@ body {
 }
 
 .icon .line {
-  width: 24px;
-  height: 24px;
+  width: 48px;
+  height: 48px;
   left: 0;
-  top: 7px;
+  top: 14px;
   fill: none;
   stroke: #fff;
   stroke-width: 2;
@@ -1152,7 +1210,7 @@ body {
 /* Footer */
 .footer {
   padding: var(--space-16) 0 var(--space-8);
-  background: black;
+  background: rgb(25, 23, 23);
   color: var(--gray-300);
   position: relative;
   overflow: hidden;
@@ -1165,9 +1223,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: black;
+  background: rgb(25, 23, 23);
   pointer-events: none;
-  animation: footerGlow 8s ease-in-out infinite alternate;
 }
 
 @keyframes footerGlow {
@@ -1391,6 +1448,7 @@ body {
 .hero-text,
 .feature-card {
   animation: fadeInUp 0.6s ease forwards;
+  
 }
 
 .feature-card:nth-child(2) {
@@ -1412,6 +1470,8 @@ body {
 .feature-card:nth-child(6) {
   animation-delay: 0.5s;
 }
+
+
 
 /* Enhanced navigation and smooth scrolling */
 html {
