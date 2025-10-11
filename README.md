@@ -287,6 +287,7 @@ TimeMachine/
 - `POST /api/auth/verify` - Verify JWT token
 - `GET /api/auth/profile` - Get user profile
 - `POST /api/auth/update-settings` - Update user settings
+- `POST /api/auth/google` - Google OAuth 2.0
 
 #### ⏱️ Time Tracking
 - `POST /api/time-data/sync` - Sync tracking data (batch)
@@ -310,6 +311,9 @@ TimeMachine/
 - `GET /api/feedback/my` - Get user's feedback
 - `GET /api/feedback/all` - Get all feedback (admin)
 - `PATCH /api/feedback/status/:id` - Update feedback status (admin)
+
+## 🔐 Google OAuth Integration
+For integrating it in this project please follow **[Google OAuth Instructions](https://developer.chrome.com/docs/extensions/how-to/integrate/oauth)**
 
 ### 🗄️ Data Models
 

@@ -68,6 +68,39 @@ function getElements(selector) {
   try { return document.querySelectorAll(selector); } catch { return []; }
 }
 
+async function signInWithGoogle() {
+  return new Promise((resolve, reject) => {
+    chrome.identity.getAuthToken({ interactive: true }, async (token) => {
+      if (chrome.runtime.lastError || !token) {
+        console.error('auth token error:', chrome.runtime.lastError);
+        return reject(new Error('Failed to get Google auth token'));
+      }
+      try {
+        // Send id token (or access token) to your backend
+        const backendUrl = await resolveBackendUrl();
+        const resp = await fetch(`${backendUrl}/api/auth/google`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken: token })
+        });
+        const data = await resp.json();
+        if (!resp.ok || !data.token) throw new Error(data.error || 'Google auth failed');
+        await TokenStorage.setToken(data.token, data.email);
+        window.__TM_AUTH_CACHE__ = { last: Date.now(), ok: true };
+        // Notify success
+        await chrome.storage.local.set({ [STORAGE_KEYS.USER_EMAIL]: data.email });
+        document.dispatchEvent(new CustomEvent('tm-auth-success', { detail: { email: data.email } }));
+        document.getElementById('emailPrompt').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+        resolve(data);
+      } catch (err) {
+        console.error('Google login backend error:', err);
+        reject(err);
+      }
+    });
+  });
+}
+
 async function resolveBackendUrl() {
   const now = Date.now();
   if (backendUrlCache.value && (now - backendUrlCache.ts) < BACKEND_URL_TTL) return backendUrlCache.value;
@@ -118,6 +151,7 @@ function initTheme() {
 function setupEventListeners() {
   const events = [
     { el: ELEMENTS.saveEmailBtn, event: 'click', handler: saveEmail },
+    { el: 'googleSignInBtn', event: 'click', handler: signInWithGoogle },
     { el: ELEMENTS.toggleAuthMode, event: 'click', handler: toggleAuthMode },
     { el: ELEMENTS.toggleThemeBtn, event: 'click', handler: () => getElement(ELEMENTS.themeDropdown).classList.toggle("hidden") },
     { el: ELEMENTS.closeNotification, event: 'click', handler: () => getElement(ELEMENTS.updateNotification).classList.add("hidden") },

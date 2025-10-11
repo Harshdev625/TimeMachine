@@ -5,12 +5,17 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { validateEmail, normalizeEmail, validatePassword } = require('../utils/validation');
 const { v4: uuidv4 } = require('uuid');
+const { OAuth2Client } = require('google-auth-library');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const BCRYPT_ROUNDS = Number(process.env.BCRYPT_ROUNDS);
 
 if (!JWT_SECRET) throw new Error('JWT_SECRET environment variable is required');
 if (!BCRYPT_ROUNDS || isNaN(BCRYPT_ROUNDS)) throw new Error('BCRYPT_ROUNDS environment variable is required and must be a number');
+
+// Google OAuth
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 // Unified response helpers
 function sendBadRequest(res, message) { return res.status(400).json({ error: message || 'Bad request' }); }
@@ -92,6 +97,57 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Server error during login', details: error.message });
   }
 });
+
+// Google OAuth login: exchange Google ID token for our JWT
+// Google OAuth login: exchange Google ID token for our JWT
+router.post("/google", async (req, res) => {
+  try {
+    const { idToken } = req.body;
+    console.log("Received token:", idToken);
+
+    if (!idToken) return res.status(400).json({ error: "idToken is required" });
+
+    // Verify token
+    const ticket = await googleClient.getTokenInfo(idToken);
+    const payload = ticket;
+    console.log("Verified Google payload:", payload);
+
+    // Find or create user
+    let user = await User.findOne({ email: payload.email });
+
+    if (!user) {
+      user = new User({
+        email: payload.email,
+        isGoogleUser: true,
+        lastActive: new Date(),
+        settings: {
+          receiveReports: true,
+          reportFrequency: "weekly",
+          categories: new Map(),
+        },
+      });
+      await user.save();
+    }
+
+    // Issue JWT like normal login
+    const token = issueToken(user);
+
+    res.json({
+      success: true,
+      token,
+      email: user.email,
+      user: {
+        email: user.email,
+        role: user.role,
+        timezone: user.timezone,
+      },
+    });
+  } catch (err) {
+    console.error("Google Auth Error:", err);
+    res.status(500).json({ error: "Google auth failed" });
+  }
+});
+
 
 // Debug endpoint to list current User schema paths (dev only)
 router.get('/debug-schema', async (req, res) => {

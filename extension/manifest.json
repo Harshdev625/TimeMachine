@@ -8,15 +8,27 @@
     "tabs",
     "activeTab",
     "storage",
+    "identity",
     "alarms",
     "idle",
     "windows",
     "notifications"
   ],
+  "oauth2": {
+    "client_id": "1042290616625-ehk16f42jqriqg0ubb237n3r0352mm3p.apps.googleusercontent.com",
+    "scopes": [
+      "openid",
+      "email",
+      "profile"
+    ]
+  },
   "host_permissions": [
     "https://timemachine-1.onrender.com/*",
     "https://api.emailjs.com/*",
-    "https://quickchart.io/*"
+    "https://quickchart.io/*",
+    "https://accounts.google.com/*",
+    "https://www.googleapis.com/*",
+    "https://people.googleapis.com/*"
   ],
   "action": {
     "default_popup": "popup.html",
@@ -47,7 +59,7 @@
     }
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://timemachine-1.onrender.com https://api.emailjs.com https://quickchart.io"
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://timemachine-1.onrender.com https://api.emailjs.com https://quickchart.io https://www.googleapis.com https://people.googleapis.com https://accounts.google.com"
   },
   "web_accessible_resources": [
     {
