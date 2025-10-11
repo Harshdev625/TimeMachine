@@ -1,35 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Site Blocked • TimeMachine</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/blocked.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Stay Focused • TimeMachine</title>
+  <meta name="description" content="Blocked page — TimeMachine focus helper" />
+  <style>
+    /* ======= Embedded blocked.css (combined) ======= */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    :root{
+      --bg-color:#f9fafc;
+      --text-color:#111827;
+      --card-bg:#ffffff;
+      --accent:#4f46e5;
+      --secondary:#9ca3af;
+    }
+    body.theme-dark {
+      --bg-color:#0b1220;
+      --text-color:#e6eef8;
+      --card-bg:#0f1724;
+      --accent:#6366f1;
+      --secondary:#6b7280;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Poppins',system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background:var(--bg-color);
+      color:var(--text-color);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition:background .35s ease,color .35s ease;
+    }
+
+    .blocked-wrap{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+    }
+
+    .blocked-card{
+      width:100%;
+      max-width:640px;
+      background:var(--card-bg);
+      border-radius:14px;
+      padding:28px 30px;
+      box-shadow:0 10px 30px rgba(2,6,23,0.08);
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+      animation:cardEnter .6s cubic-bezier(.2,.9,.2,1);
+    }
+
+    @keyframes cardEnter {
+      from{opacity:0; transform: translateY(12px)}
+      to{opacity:1; transform: translateY(0)}
+    }
+
+    .blocked-icon{ color:var(--accent); margin-bottom:10px; display:inline-block; animation:pulse 2.2s infinite; }
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+
+    .blocked-title{
+      font-size:1.8rem;
+      margin:.2rem 0 .25rem;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+
+    .blocked-domain{
+      display:inline-block;
+      font-weight:600;
+      color:var(--accent);
+      background:rgba(79,70,229,0.08);
+      padding:.25rem .6rem;
+      border-radius:999px;
+      margin-bottom:.5rem;
+      font-size:.95rem;
+    }
+
+    .blocked-reason{
+      margin:0.6rem 0 1.6rem;
+      color:var(--secondary);
+      line-height:1.45;
+    }
+
+    .blocked-tips{ text-align:left; margin:0 0 1.25rem; }
+    .tips-title{ font-size:1.05rem; color:var(--accent); margin:0 0 .6rem; font-weight:700; }
+    .tips-list{ margin:0; padding:0 0 0 1rem; color:var(--text-color); }
+    .tips-list li{ margin:.35rem 0; list-style:disc; }
+
+    .blocked-info{
+      background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent);
+      border-radius:10px;
+      padding:14px 16px;
+      text-align:left;
+      margin-top:12px;
+    }
+
+    .info-row{ display:flex; justify-content:space-between; padding:.45rem 0; align-items:center; }
+    .info-label{ color:var(--secondary); font-weight:600; font-size:.95rem; }
+    .info-value{ font-weight:600; color:var(--text-color); font-size:.95rem; }
+
+    .blocked-actions{
+      display:flex;
+      gap:.6rem;
+      margin-top:1.25rem;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:0;
+      outline:0;
+      cursor:pointer;
+      padding:.55rem 1rem;
+      border-radius:9px;
+      font-weight:700;
+      font-size:.95rem;
+      transition:transform .16s ease, box-shadow .16s ease;
+      user-select:none;
+      box-shadow:0 6px 16px rgba(2,6,23,0.06);
+      background:var(--accent);
+      color:#fff;
+    }
+    .btn:hover{ transform:translateY(-3px); box-shadow:0 10px 30px rgba(2,6,23,0.12) }
+
+    .btn.btn-secondary{ background:var(--secondary); color:#fff; }
+    .btn.btn-accent{ background:var(--accent); }
+
+    .nav-hint{ margin-top:12px; color:var(--secondary); font-size:.88rem; }
+
+    .kbd{
+      display:inline-block;
+      background:var(--secondary);
+      color:#fff;
+      padding:.18rem .48rem;
+      border-radius:6px;
+      font-weight:700;
+      font-size:.82rem;
+      margin:0 .2rem;
+    }
+
+    .theme-toggle{
+      position:absolute;
+      top:12px;
+      right:12px;
+    }
+    .btn-toggle{
+      background:transparent;
+      border:1px solid rgba(0,0,0,0.06);
+      padding:.4rem .6rem;
+      border-radius:8px;
+      font-weight:700;
+    }
+    .btn-toggle:hover{ transform:translateY(-2px) }
+
+    /* small screens */
+    @media (max-width:520px){
+      .blocked-card{ padding:20px; border-radius:12px }
+      .blocked-title{ font-size:1.4rem }
+      .blocked-domain{ font-size:.88rem }
+      .blocked-reason{ font-size:.95rem }
+      .blocked-actions{ gap:.4rem }
+      .btn{ padding:.5rem .85rem; font-size:.92rem }
+    }
+  </style>
 </head>
 <body class="theme-light blocked-body">
-  <main class="blocked-wrap">
-    <section class="blocked-card card">
+  <main class="blocked-wrap" role="main">
+    <section class="blocked-card" aria-labelledby="blocked-title" role="region">
+      <!-- Theme toggle button (positioned absolute) -->
+      <div class="theme-toggle" aria-hidden="false">
+        <button id="toggleTheme" class="btn btn-toggle" aria-pressed="false" title="Toggle theme">🌞 / 🌙</button>
+      </div>
+
+      <!-- Icon -->
       <div class="blocked-icon" aria-hidden="true">
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 1l3 5 5 3-5 3-3 5-3-5-5-3 5-3z"/>
           <path d="M15 9l-6 6"/>
         </svg>
       </div>
+
+      <!-- Header -->
       <header class="blocked-header">
-        <h1 class="blocked-title">Stay Focused</h1>
+        <h1 id="blocked-title" class="blocked-title">Stay Focused</h1>
         <div class="blocked-domain" id="blockedDomain">example.com</div>
-        <p class="blocked-reason" id="blockReason">This site is blocked to help you focus.</p>
+        <p class="blocked-reason" id="blockReason">This website is blocked to help you stay productive.</p>
       </header>
-      <div class="blocked-tips">
-        <h2 class="tips-title">Quick tips</h2>
+
+      <!-- Tips -->
+      <div class="blocked-tips" aria-label="Quick tips">
+        <h2 class="tips-title">💡 Quick Tips</h2>
         <ul class="tips-list">
           <li>Use Focus sessions to block distractions temporarily.</li>
-          <li>Manage your block list from the Guard tab in the app.</li>
-          <li>Customize themes in the popup to match your preference.</li>
+          <li>Manage your block list from the Guard tab.</li>
+          <li>Customize the theme and settings to match your workflow.</li>
         </ul>
       </div>
-      <div class="blocked-info card">
+
+      <!-- Info -->
+      <div class="blocked-info" role="group" aria-label="Block information">
         <div class="info-row">
           <span class="info-label">Reason</span>
           <span id="infoReason" class="info-value">Blocked to reduce distractions.</span>
@@ -43,18 +219,143 @@
           <span id="infoFocus" class="info-value">No active focus session</span>
         </div>
         <div class="info-row">
-          <span class="info-label">Local time</span>
+          <span class="info-label">Local Time</span>
           <span id="infoLocalTime" class="info-value">--:--</span>
         </div>
       </div>
-      <div class="blocked-actions">
+
+      <!-- Actions -->
+      <div class="blocked-actions" role="toolbar" aria-label="Actions">
         <button id="actionBack" class="btn btn-secondary" title="Close tab">Close Tab</button>
-        <button id="actionDashboard" class="btn" title="Open extension popup">Open Dashboard</button>
-        <button id="actionStartFocus" class="btn btn-accent" title="Start a focus session">Start Focus</button>
+        <button id="actionDashboard" class="btn" title="Open dashboard">Open Dashboard</button>
+        <button id="actionStartFocus" class="btn btn-accent" title="Start Focus Session">Start Focus</button>
       </div>
-      <p class="nav-hint">Press <kbd class="kbd">Esc</kbd> or <kbd class="kbd">Backspace</kbd> to close this tab.</p>
+
+      <p class="nav-hint" aria-hidden="false">Press <span class="kbd">Esc</span> or <span class="kbd">Backspace</span> to close this tab.</p>
     </section>
   </main>
-  <script src="blocked.js"></script>
+
+  <script>
+    /* ======= Embedded blocked.js (combined) ======= */
+
+    (function(){
+      // Utility: safe query
+      const $ = (id) => document.getElementById(id);
+
+      // Update local time every second
+      function updateLocalTime() {
+        const timeElem = $('infoLocalTime');
+        if (!timeElem) return;
+        const now = new Date();
+        // show hours:minutes in user's locale
+        timeElem.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+      updateLocalTime();
+      setInterval(updateLocalTime, 1000);
+
+      // Theme toggle (persists in localStorage)
+      const toggleBtn = $('toggleTheme');
+      const body = document.body;
+      const THEME_KEY = 'tm_theme';
+
+      function applyStoredTheme(){
+        const stored = localStorage.getItem(THEME_KEY);
+        if (stored === 'dark') {
+          body.classList.add('theme-dark');
+          toggleBtn.setAttribute('aria-pressed','true');
+        } else {
+          body.classList.remove('theme-dark');
+          toggleBtn.setAttribute('aria-pressed','false');
+        }
+      }
+      applyStoredTheme();
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const isDark = body.classList.toggle('theme-dark');
+          toggleBtn.setAttribute('aria-pressed', String(isDark));
+          localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+        });
+      }
+
+      // Button actions (basic/simulated for extension page)
+      const backBtn = $('actionBack');
+      const dashboardBtn = $('actionDashboard');
+      const startFocusBtn = $('actionStartFocus');
+
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          // If inside extension popup this won't close browser tab; in a real extension use chrome.tabs or window.close()
+          try { window.close(); } catch(e){ /* ignore */ }
+          // fallback message
+          const txt = document.createElement('div');
+          txt.style.position='fixed';
+          txt.style.left='50%'; txt.style.top='20px';
+          txt.style.transform='translateX(-50%)';
+          txt.style.background='rgba(0,0,0,0.7)'; txt.style.color='#fff';
+          txt.style.padding='8px 12px'; txt.style.borderRadius='8px';
+          txt.style.zIndex=9999; txt.style.fontSize='13px';
+          txt.textContent = 'Close requested — please close this tab.';
+          document.body.appendChild(txt);
+          setTimeout(()=> txt.remove(),2200);
+        });
+      }
+
+      if (dashboardBtn) {
+        dashboardBtn.addEventListener('click', () => {
+          // In a real extension you'd open popup or options; here we simulate feedback
+          alert('Opening dashboard (simulated).');
+        });
+      }
+
+      if (startFocusBtn) {
+        startFocusBtn.addEventListener('click', () => {
+          // Simulated start focus action: update UI
+          const infoFocus = $('infoFocus');
+          if (infoFocus) {
+            const now = new Date();
+            infoFocus.textContent = 'Active — started ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          }
+          // small toast
+          const t=document.createElement('div');
+          t.textContent='Focus session started ✅';
+          t.style.position='fixed'; t.style.bottom='18px'; t.style.left='50%'; t.style.transform='translateX(-50%)';
+          t.style.background='linear-gradient(90deg, rgba(79,70,229,1), rgba(99,102,241,0.95))';
+          t.style.color='#fff'; t.style.padding='10px 14px'; t.style.borderRadius='10px'; t.style.boxShadow='0 8px 30px rgba(2,6,23,0.18)';
+          t.style.zIndex=9999; document.body.appendChild(t);
+          setTimeout(()=> t.remove(),2200);
+        });
+      }
+
+      // Keyboard shortcuts: Esc or Backspace to close (simulate)
+      window.addEventListener('keydown', function(e){
+        if (e.key === 'Escape' || e.key === 'Backspace') {
+          e.preventDefault();
+          if (backBtn) backBtn.click();
+        }
+      });
+
+      // Example: If page was opened with query params to show domain & reason, use them
+      // e.g., blocked.html?domain=facebook.com&reason=Focus%20session
+      try {
+        const params = new URLSearchParams(location.search);
+        const domain = params.get('domain');
+        const reason = params.get('reason');
+        const rule = params.get('rule');
+        if (domain) {
+          const dd = $('blockedDomain'); if(dd) dd.textContent = domain;
+          const ir = $('infoRule'); if(ir) ir.textContent = 'Site: ' + domain;
+        }
+        if (reason) {
+          const br = $('blockReason'); if(br) br.textContent = decodeURIComponent(reason);
+          const ir2 = $('infoReason'); if(ir2) ir2.textContent = decodeURIComponent(reason);
+        }
+        if (rule) {
+          const ir3 = $('infoRule'); if(ir3) ir3.textContent = rule;
+        }
+      } catch(e){ /* ignore parsing errors */ }
+
+    })();
+  </script>
 </body>
 </html>
