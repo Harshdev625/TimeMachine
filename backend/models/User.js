@@ -29,9 +29,15 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  isGoogleUser: {
+    type: Boolean,
+    default: false
+  },  
   password: {
     type: String,
-    required: true,
+    required: function() { 
+      return !this.isGoogleUser; 
+    } ,
     select: false
   },
   resetToken: {
