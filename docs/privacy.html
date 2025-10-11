@@ -25,7 +25,7 @@
                 <span class="brand-text">TimeMachine</span>
             </div>
             <div class="nav-links">
-                <a href="index.html" class="nav-link">← Back to Home</a>
+                <a href="index.html" class="nav-link">Back to Home</a>
             </div>
         </div>
     </nav>
@@ -34,14 +34,13 @@
     <section class="page-hero">
         <div class="container">
             <div class="hero-badge">
-                <span class="badge-icon">🔒</span>
                 <span class="badge-text">Last updated: September 15, 2025</span>
             </div>
             <h1 class="page-title">
                 <span class="gradient-text">Privacy Policy</span>
             </h1>
             <p class="page-description">
-                TimeMachine helps you focus by tracking active sites, blocking distracting content, and summarizing productivity. We designed it to minimize the data we store and to keep you in control.
+                TimeMachine is designed to help you focus while respecting your privacy. We minimize data collection and keep you in control.
             </p>
         </div>
     </section>
@@ -49,333 +48,180 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Quick Summary -->
-            <section class="summary-section">
-                <div class="summary-card">
-                    <h2 class="summary-title">Privacy at a Glance</h2>
-                    <div class="summary-grid">
-                        <div class="summary-item">
-                            <span class="summary-icon">✓</span>
-                            <div class="summary-text">
-                                <strong>Local First</strong>
-                                <p>Data stored locally, synced when needed</p>
-                            </div>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-icon">✓</span>
-                            <div class="summary-text">
-                                <strong>No Tracking</strong>
-                                <p>No third-party tracking or analytics</p>
-                            </div>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-icon">✓</span>
-                            <div class="summary-text">
-                                <strong>You Control</strong>
-                                <p>Delete your data anytime</p>
-                            </div>
-                        </div>
-                        <div class="summary-item">
-                            <span class="summary-icon">✓</span>
-                            <div class="summary-text">
-                                <strong>HTTPS Only</strong>
-                                <p>All communication encrypted</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
+            
             <!-- Data Collection -->
             <section class="content-section">
-                <div class="section-icon">📊</div>
-                <h2 class="section-title">1. Data We Collect</h2>
+                <h2 class="section-title">What Data We Collect</h2>
                 
                 <div class="table-container">
                     <table class="data-table">
                         <thead>
                             <tr>
                                 <th>Category</th>
-                                <th>What</th>
-                                <th>Where Stored</th>
-                                <th>Retention</th>
+                                <th>What We Store</th>
+                                <th>Storage Location</th>
+                                <th>Duration</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><strong>Account</strong></td>
-                                <td>Email (for authentication)</td>
+                                <td>Email for authentication</td>
                                 <td>Backend database</td>
                                 <td>Until account deletion</td>
                             </tr>
                             <tr>
-                                <td><strong>Auth</strong></td>
-                                <td>Hashed password (never plain text)</td>
+                                <td><strong>Authentication</strong></td>
+                                <td>Hashed password</td>
                                 <td>Backend database</td>
                                 <td>Until account deletion</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Focus / Problem Sessions</strong></td>
-                                <td>Session start/end, labels, duration</td>
-                                <td>Local first, then synced</td>
-                                <td>Until deleted by user</td>
                             </tr>
                             <tr>
                                 <td><strong>Time Tracking</strong></td>
-                                <td>URL hostname + accumulated seconds</td>
-                                <td>Local first, then synced</td>
-                                <td>Rolling history (per user settings)</td>
+                                <td>Domain names and time spent</td>
+                                <td>Local device, synced to backend</td>
+                                <td>Based on your settings</td>
                             </tr>
                             <tr>
-                                <td><strong>Block Lists</strong></td>
-                                <td>Blocked domains, keywords</td>
-                                <td>Synced (user-scoped)</td>
-                                <td>Until removed by user</td>
+                                <td><strong>Focus Sessions</strong></td>
+                                <td>Session duration and labels</td>
+                                <td>Local device, synced to backend</td>
+                                <td>Until you delete them</td>
                             </tr>
                             <tr>
-                                <td><strong>Feedback</strong></td>
-                                <td>Text + optional email</td>
-                                <td>Backend (feedback collection)</td>
-                                <td>Until actioned / periodic pruning</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Reports</strong></td>
-                                <td>Generated PDF/chart artifacts</td>
-                                <td>Transient (sent to your email)</td>
-                                <td>Not persistently stored after send</td>
+                                <td><strong>Blocked Sites</strong></td>
+                                <td>Domains and keywords</td>
+                                <td>Synced to backend</td>
+                                <td>Until you remove them</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <div class="callout-box callout-info">
-                    <div class="callout-icon">ℹ️</div>
                     <div class="callout-content">
-                        <strong>We DO NOT collect:</strong>
-                        <p>Full page content, keystrokes, form entries, downloads, cookies, or precise geolocation.</p>
+                        <strong>What We Don't Collect</strong>
+                        <p>We never collect full URLs, page content, keystrokes, form data, downloads, or your precise location.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Data Processing -->
+            <!-- How We Use Data -->
             <section class="content-section">
-                <div class="section-icon">⚙️</div>
-                <h2 class="section-title">2. How Data Is Processed</h2>
+                <h2 class="section-title">How We Use Your Data</h2>
                 
-                <div class="process-steps">
-                    <div class="process-step">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h3>Local Recording</h3>
-                            <p>The extension records foreground tab hostname and time spent at short intervals.</p>
-                        </div>
-                    </div>
-                    <div class="process-step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h3>Block Checks</h3>
-                            <p>Block checks run locally first (URL + keywords). Optional in-page keyword scanning reads visible text only; it never transmits page bodies to the server—only the fact a keyword matched.</p>
-                        </div>
-                    </div>
-                    <div class="process-step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h3>Sync Process</h3>
-                            <p>Data buffers locally and syncs periodically to the backend API over HTTPS.</p>
-                        </div>
-                    </div>
-                    <div class="process-step">
-                        <div class="step-number">4</div>
-                        <div class="step-content">
-                            <h3>Report Generation</h3>
-                            <p>Reports (email summaries) are generated using your already synced, structured data—not raw browsing history.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Keyword Scanning -->
-            <section class="content-section">
-                <div class="section-icon">🔍</div>
-                <h2 class="section-title">3. Optional Content Keyword Scanning</h2>
-                
-                <p class="section-text">You can disable in-page keyword scanning in the Guard tab. When disabled:</p>
-                
-                <ul class="feature-list">
-                    <li>Only URL + domain name matching is used.</li>
-                    <li>No page text is read or analyzed.</li>
+                <ul class="simple-list">
+                    <li>Track time spent on websites to generate productivity insights</li>
+                    <li>Sync your data across devices when you're signed in</li>
+                    <li>Block distracting websites based on your preferences</li>
+                    <li>Generate reports and analytics about your browsing habits</li>
                 </ul>
 
-                <div class="callout-box callout-warning">
-                    <div class="callout-icon">⚠️</div>
+                <div class="callout-box callout-success">
                     <div class="callout-content">
-                        <strong>Your Choice:</strong>
-                        <p>Keyword scanning is optional and can be toggled at any time in the Guard settings.</p>
+                        <strong>Your Data, Your Control</strong>
+                        <p>All data processing happens locally first. We only sync what's necessary for cross-device functionality.</p>
                     </div>
                 </div>
-            </section>
-
-            <!-- Cookies & Storage -->
-            <section class="content-section">
-                <div class="section-icon">🍪</div>
-                <h2 class="section-title">4. Cookies & Local Storage</h2>
-                
-                <ul class="feature-list">
-                    <li>Auth tokens are stored using extension storage (and/or localStorage) for session continuity.</li>
-                    <li>No third-party tracking cookies are set by the extension.</li>
-                </ul>
             </section>
 
             <!-- Data Sharing -->
             <section class="content-section">
-                <div class="section-icon">🤝</div>
-                <h2 class="section-title">5. Data Sharing</h2>
+                <h2 class="section-title">Data Sharing</h2>
                 
-                <p class="section-text">We do not sell or share your data with advertisers. Data may be processed by infrastructure/service providers strictly to operate core features (e.g., email delivery service for reports/feedback confirmations).</p>
-
-                <div class="callout-box callout-success">
-                    <div class="callout-icon">✓</div>
-                    <div class="callout-content">
-                        <strong>No Selling:</strong>
-                        <p>Your data is never sold to third parties or used for advertising purposes.</p>
-                    </div>
-                </div>
+                <p class="section-text">We do not sell, rent, or share your personal data with third parties for advertising purposes. Your data may only be processed by our infrastructure providers to deliver core features like email reports.</p>
             </section>
 
             <!-- Security -->
             <section class="content-section">
-                <div class="section-icon">🔐</div>
-                <h2 class="section-title">6. Security Measures</h2>
+                <h2 class="section-title">Security Measures</h2>
                 
                 <div class="security-grid">
                     <div class="security-card">
-                        <div class="security-icon">🔑</div>
-                        <h3>Password Hashing</h3>
-                        <p>Passwords hashed with modern algorithms (bcrypt or argon2)</p>
+                        <h3>Encrypted Passwords</h3>
+                        <p>All passwords are hashed using industry-standard algorithms</p>
                     </div>
                     <div class="security-card">
-                        <div class="security-icon">🔒</div>
                         <h3>HTTPS Only</h3>
-                        <p>All API calls use encrypted HTTPS connections</p>
+                        <p>All communication is encrypted via secure HTTPS connections</p>
                     </div>
                     <div class="security-card">
-                        <div class="security-icon">🎯</div>
-                        <h3>Minimal Scope</h3>
-                        <p>Only necessary fields are stored</p>
+                        <h3>Minimal Data</h3>
+                        <p>We only store what's necessary for functionality</p>
                     </div>
                 </div>
             </section>
 
-            <!-- User Controls -->
+            <!-- Your Rights -->
             <section class="content-section">
-                <div class="section-icon">⚡</div>
-                <h2 class="section-title">7. Your Controls</h2>
+                <h2 class="section-title">Your Rights</h2>
                 
                 <div class="table-container">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Action</th>
-                                <th>How</th>
+                                <th>Right</th>
+                                <th>How to Exercise</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>View time & sessions</td>
-                                <td>Extension popup & analytics tab</td>
+                                <td>View your data</td>
+                                <td>Access through extension popup and analytics tab</td>
                             </tr>
                             <tr>
-                                <td>Delete a blocked site/keyword</td>
-                                <td>Guard tab remove button</td>
+                                <td>Delete specific data</td>
+                                <td>Use remove buttons in Guard, Focus, and Session tabs</td>
                             </tr>
                             <tr>
-                                <td>Delete sessions</td>
-                                <td>Session management UI (focus/problem)</td>
+                                <td>Export your data</td>
+                                <td>Generate PDF reports from Summary tab</td>
                             </tr>
                             <tr>
-                                <td>Disable keyword scanning</td>
-                                <td>Toggle in Guard tab</td>
-                            </tr>
-                            <tr>
-                                <td>Sign out</td>
-                                <td>Auth section (clears token locally)</td>
-                            </tr>
-                            <tr>
-                                <td>Account deletion (data purge)</td>
-                                <td>Contact support (see below)</td>
+                                <td>Delete your account</td>
+                                <td>Contact support with your registered email</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Data Deletion -->
+            <!-- Cookies -->
             <section class="content-section">
-                <div class="section-icon">🗑️</div>
-                <h2 class="section-title">8. Data Deletion / Export</h2>
+                <h2 class="section-title">Cookies & Storage</h2>
                 
-                <p class="section-text">Full self-service export & deletion endpoints are planned. For now, email support to request manual deletion. Provide the email you used to register.</p>
-
-                <div class="callout-box callout-info">
-                    <div class="callout-icon">🚧</div>
-                    <div class="callout-content">
-                        <strong>Coming Soon:</strong>
-                        <p>Self-service data export and deletion features are under development.</p>
-                    </div>
-                </div>
+                <p class="section-text">TimeMachine stores authentication tokens locally using browser storage to keep you signed in. We do not use third-party tracking cookies or analytics services.</p>
             </section>
 
-            <!-- Children's Privacy -->
+            <!-- Updates -->
             <section class="content-section">
-                <div class="section-icon">👶</div>
-                <h2 class="section-title">9. Children's Privacy</h2>
+                <h2 class="section-title">Policy Updates</h2>
                 
-                <p class="section-text">Not intended for users under 13. If a minor's data was collected, contact us for removal.</p>
-            </section>
-
-            <!-- Policy Changes -->
-            <section class="content-section">
-                <div class="section-icon">📝</div>
-                <h2 class="section-title">10. Changes to This Policy</h2>
-                
-                <p class="section-text">We may update this policy. Material changes will be noted in the changelog and README with an updated date above.</p>
+                <p class="section-text">We may update this privacy policy from time to time. Significant changes will be communicated through our GitHub repository with an updated date at the top of this page.</p>
             </section>
 
             <!-- Contact -->
             <section class="content-section">
-                <div class="section-icon">📧</div>
-                <h2 class="section-title">11. Contact</h2>
+                <h2 class="section-title">Contact Us</h2>
                 
-                <p class="section-text">For privacy inquiries or deletion requests:</p>
+                <p class="section-text">For privacy-related questions or to request data deletion:</p>
                 
                 <div class="contact-options">
-                    <a href="mailto:support@example.com" class="contact-option">
-                        <span class="contact-icon">✉️</span>
+                    <a href="https://github.com/HarshDev625/TimeMachine/issues" target="_blank" class="contact-option">
                         <span class="contact-text">
-                            <strong>Email</strong>
-                            <span>support@example.com</span>
+                            <strong>GitHub Issues</strong>
+                            <span>Open an issue for privacy inquiries</span>
                         </span>
                     </a>
-                    <a href="https://github.com/HarshDev625/TimeMachine/issues" target="_blank" class="contact-option">
-                        <span class="contact-icon">🐛</span>
+                    <a href="mailto:support@example.com" class="contact-option">
                         <span class="contact-text">
-                            <strong>Issue Tracker</strong>
-                            <span>GitHub Issues</span>
+                            <strong>Email Support</strong>
+                            <span>support@example.com</span>
                         </span>
                     </a>
                 </div>
             </section>
 
-            <!-- Transparency Note -->
-            <section class="transparency-section">
-                <div class="transparency-card">
-                    <div class="transparency-icon">💡</div>
-                    <div class="transparency-content">
-                        <h3>Transparency First</h3>
-                        <p>If you see something missing that you need for compliance (school / enterprise usage), open an issue so we can prioritize it.</p>
-                    </div>
-                </div>
-            </section>
         </div>
     </main>
 
