@@ -1,33 +1,40 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeToggleInput = document.getElementById('toggle');
+    const themeToggleButton = document.getElementById('theme-toggle-button');
 
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('light-theme');
+    if (themeToggleInput && themeToggleButton) {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
 
-            
-            if (document.body.classList.contains('light-theme')) {
-                localStorage.setItem('theme', 'light');
-            } else {
+        if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
+            document.body.classList.add('light-theme');
+            themeToggleInput.checked = false;
+        } else {
+            document.body.classList.remove('light-theme');
+            themeToggleInput.checked = true;
+        }
+
+        themeToggleInput.addEventListener('change', () => {
+            if (themeToggleInput.checked) {
+                document.body.classList.remove('light-theme');
                 localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.add('light-theme');
+                localStorage.setItem('theme', 'light');
             }
         });
-
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light' || (!savedTheme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-            document.body.classList.add('light-theme');
-        }
     }
+
 
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
 
-     if (mobileMenuBtn) {
-+        mobileMenuBtn.addEventListener('click', () => {
-        if (navLinks) navLinks.classList.toggle('active');
-        mobileMenuBtn.classList.toggle('active');
-    });
-}
+    if (mobileMenuBtn) {
+        +        mobileMenuBtn.addEventListener('click', () => {
+            if (navLinks) navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+    }
 
     const heroCard = document.querySelector('.hero-card');
     const cardGlow = heroCard?.querySelector('.card-glow');

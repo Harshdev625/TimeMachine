@@ -106,16 +106,74 @@ body.dark-theme {
   --card-bg-color: #222121;
 }
 
-
-.theme-toggle-btn {
-  background-color: #1ADBFF;
-  padding: 0.5em;
-  border-radius: 0.5em;
-  display: inline-flex;
+#theme-toggle-button {
+  font-size: 7px;
+  position: relative;
+  display: inline-block;
+  width: 7em;
   cursor: pointer;
 }
 
-/* SVG uses currentColor for fill */
+#toggle {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+#container,
+#patches,
+#stars,
+#button,
+#sun,
+#moon,
+#cloud {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.25s;
+}
+
+#toggle:checked+svg #container {
+  fill: #2b4360;
+}
+
+#toggle:checked+svg #button {
+  transform: translate(28px, 2.333px);
+}
+
+
+#sun {
+  opacity: 1;
+}
+
+#toggle:checked+svg #sun {
+  opacity: 0;
+}
+
+#moon {
+  opacity: 0;
+}
+
+#toggle:checked+svg #moon {
+  opacity: 1;
+}
+
+#cloud {
+  opacity: 1;
+}
+
+#toggle:checked+svg #cloud {
+  opacity: 0;
+}
+
+#stars {
+  opacity: 0;
+}
+
+#toggle:checked+svg #stars {
+  opacity: 1;
+}
+
+
 .theme-toggle-btn svg {
   color: var(--bg-color);
   fill: currentColor;
@@ -186,16 +244,14 @@ body.dark-theme {
 }
 
 .logo {
-  width: 55px;
-  height: 50px;
-  border-radius: 40%;
+  width: 60px;
+  height: 55px;
   transition: all 0.3s ease;
 }
 
 .navbar.scrolled .logo {
   width: 55px;
   height: 50px;
-  border-radius: 50%;
 }
 
 .brand-text {
@@ -1068,28 +1124,29 @@ body.dark-theme {
 }
 
 .download-buttons .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
 }
 
 .download-info {
-    display: flex;
-    justify-content: center;
-    margin-bottom: var(--space-8);
-    margin-top: var(--space-4);
-    font-size: var(--font-size-sm);
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-8);
+  margin-top: var(--space-4);
+  font-size: var(--font-size-sm);
 }
+
 .download .btn-primary.btn-large {
-    background: linear-gradient(135deg, #1e293b 0%, #3b82f6 50%, #7c3aed 100%);
-    color: #f8fafc;
-    font-size: 1.1rem;
-    font-weight: 700;
-    padding: 1.2rem 2.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 10px 25px rgba(0, 114, 255, 0.35);
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
+  background: linear-gradient(135deg, #1e293b 0%, #3b82f6 50%, #7c3aed 100%);
+  color: #f8fafc;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 1.2rem 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 114, 255, 0.35);
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
 }
 
 .info-item {
@@ -1166,78 +1223,78 @@ body.dark-theme {
 }
 
 .btn-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
 }
 
 .icon {
-    --arrow-y: 0;
-    --arrow-rotate: 135;
-    --arrow-top: 10px;
-    width: 24px;
-    height: 24px;
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
-    pointer-events: none;
+  --arrow-y: 0;
+  --arrow-rotate: 135;
+  --arrow-top: 10px;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  pointer-events: none;
 }
 
 .icon .dot {
-    border-radius: 50%;
-    background: #fff;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 4px;
-    height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 4px;
 }
 
 .icon .arrow,
 .icon .line {
-    position: absolute;
-    z-index: 1;
+  position: absolute;
+  z-index: 1;
 }
 
 .icon .arrow {
-    left: 11px;
-    top: 4px;
-    width: 2px;
-    height: 12px;
-    border-radius: 1px;
-    background: #fff;
-    transform: translateY(calc(var(--arrow-y) * 1px)) translateZ(0);
+  left: 11px;
+  top: 4px;
+  width: 2px;
+  height: 12px;
+  border-radius: 1px;
+  background: #fff;
+  transform: translateY(calc(var(--arrow-y) * 1px)) translateZ(0);
 }
 
 .icon .arrow:before,
 .icon .arrow:after {
-    content: "";
-    width: 2px;
-    height: 7px;
-    position: absolute;
-    left: 0;
-    top: var(--arrow-top);
-    border-radius: 1px;
-    background: inherit;
-    transform-origin: 1px 1px;
-    transform: rotate(var(--r, calc(var(--arrow-rotate) * 1deg)));
+  content: "";
+  width: 2px;
+  height: 7px;
+  position: absolute;
+  left: 0;
+  top: var(--arrow-top);
+  border-radius: 1px;
+  background: inherit;
+  transform-origin: 1px 1px;
+  transform: rotate(var(--r, calc(var(--arrow-rotate) * 1deg)));
 }
 
 .icon .arrow:after {
-    --r: calc(var(--arrow-rotate) * -1deg);
+  --r: calc(var(--arrow-rotate) * -1deg);
 }
 
 .icon .line {
-    width: 24px;
-    height: 24px;
-    left: 0;
-    top: 7px;
-    fill: none;
-    stroke: #fff;
-    stroke-width: 2;
-    stroke-linejoin: round;
-    stroke-linecap: round;
+  width: 24px;
+  height: 24px;
+  left: 0;
+  top: 7px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
 
