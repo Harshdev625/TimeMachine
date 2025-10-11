@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -28,6 +29,10 @@
   --cta-blue-dark: #109fff;
   --cta-glow-blue: #27d1fe88;
   --cta-yellow: #FFD600;
+  --card-bg-color: #ffffff;
+  --bg-color: #000000;
+  --text-color: #ffffff;
+  --card-bg-color: #222121;
   /* Typography */
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-size-xs: 0.75rem;
@@ -90,11 +95,31 @@ body {
 }
 
 body.light-theme {
-  --bg-color: white;
-  --text-color: black;
+  --bg-color: #E4E5F1;
+  --text-color: #000000;
+  --card-bg-color: #f0f0f0;
+}
+
+body.dark-theme {
+  --bg-color: #000000;
+  --text-color: #ffffff;
+  --card-bg-color: #222121;
 }
 
 
+.theme-toggle-btn {
+  background-color: #1ADBFF;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+/* SVG uses currentColor for fill */
+.theme-toggle-btn svg {
+  color: var(--bg-color);
+  fill: currentColor;
+}
 
 .container {
   max-width: 1200px;
@@ -124,7 +149,11 @@ body.light-theme {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
-  backdrop-filter: blur(20px);  
+  backdrop-filter: blur(20px);
+  background-color: var(--text-color);
+  color: var(--bg-color);
+
+
 }
 
 /* Shrink and Center on Scroll */
@@ -159,14 +188,14 @@ body.light-theme {
 .logo {
   width: 55px;
   height: 50px;
-  border-radius:50%;
+  border-radius: 40%;
   transition: all 0.3s ease;
 }
 
 .navbar.scrolled .logo {
   width: 55px;
   height: 50px;
-  border-radius:50%;
+  border-radius: 50%;
 }
 
 .brand-text {
@@ -270,7 +299,7 @@ body.light-theme {
   gap: 4rem;
   align-items: center;
   z-index: 2;
-  
+
 }
 
 .hero-title {
@@ -440,7 +469,7 @@ body.light-theme {
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
 }
 
 .hero-card {
@@ -573,10 +602,11 @@ body.light-theme {
   gap: var(--space-8);
   position: relative;
   z-index: 2;
+
 }
 
 .feature-card {
-  background: linear-gradient(160deg, rgba(40, 42, 57, 0.85) 0%, rgba(25, 24, 37, 0.75) 100%);
+
   border-radius: var(--radius-2xl);
   padding: var(--space-8);
   text-align: center;
@@ -584,21 +614,24 @@ body.light-theme {
   border: 1.5px solid rgba(90, 150, 255, 0.15);
   backdrop-filter: blur(15px);
   box-shadow:
-    0 4px 12px rgba(40, 50, 255, 0.04),
+    0 8px 18px rgba(40, 50, 255, 0.04),
     inset 0 0 8px rgba(60, 90, 255, 0.08);
   color: #bccced;
-  background-color: var(--bg-color);
+  background-color: var(--card-bg-color);
   color: var(--text-color);
+  transition: background-color 0.4s ease, color 0.4s ease;
+
 }
 
 .feature-card:hover {
-  background: linear-gradient(160deg, rgba(55, 58, 85, 0.95) 0%, rgba(35, 33, 52, 0.9) 100%);
   box-shadow:
     0 12px 38px rgba(63, 127, 255, 0.26),
     inset 0 0 22px rgba(70, 110, 255, 0.3);
   transform: translateY(-6px) scale(1.05);
   border-color: rgba(70, 130, 255, 0.32);
   color: #dde5ff;
+  background-color: var(--card-bg-color);
+  color: var(--text-color);
 }
 
 .feature-icon {
@@ -1030,26 +1063,33 @@ body.light-theme {
 }
 
 .download-buttons {
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-4);
   text-align: center;
 }
 
 .download-buttons .btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
 }
 
-
 .download-info {
-  display: flex;
-  justify-content: center;
-  margin-bottom: var(--space-8);
-  margin-top: var(--space-4);
-  font-size: var(--font-size-sm);
-  color: #d7defb;
-  background-color: var(--bg-color);
-  color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-8);
+    margin-top: var(--space-4);
+    font-size: var(--font-size-sm);
+}
+.download .btn-primary.btn-large {
+    background: linear-gradient(135deg, #1e293b 0%, #3b82f6 50%, #7c3aed 100%);
+    color: #f8fafc;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 1.2rem 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 114, 255, 0.35);
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
 }
 
 .info-item {
@@ -1071,7 +1111,8 @@ body.light-theme {
   font-weight: 700;
   font-size: 0.85rem;
 }
-.info-value-1{
+
+.info-value-1 {
   font-weight: 700;
   font-size: 0.85rem;
 }
@@ -1117,100 +1158,93 @@ body.light-theme {
   gap: 0.25rem;
   text-align: center;
   padding: 1rem 2rem;
-  width: max-content; 
+  width: max-content;
   min-width: 0;
-  border-radius: 0.75rem; 
+  border-radius: 0.75rem;
   cursor: pointer;
   margin: auto;
 }
 
 .btn-icon {
-  display: block;
-  margin: 0;
-  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
 }
-
-.btn-subtitle {
-  font-size: 0.85rem;
-  color: #939393;
-  margin-top: 0.25rem;
-  font-weight: 200;
-}
-
 
 .icon {
-  --arrow-y: 0;
-  --arrow-rotate: 135;
-  --arrow-top: 25px;
-  width: 48px;
-  height: 48px;
-  position: relative;
-  display: inline-block;
-  vertical-align: top;
-  pointer-events: none;
+    --arrow-y: 0;
+    --arrow-rotate: 135;
+    --arrow-top: 10px;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    pointer-events: none;
 }
 
 .icon .dot {
-  border-radius: 50%;
-  background: #fff;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 8px;
-  height: 8px;
+    border-radius: 50%;
+    background: #fff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 4px;
 }
 
 .icon .arrow,
 .icon .line {
-  position: absolute;
-  z-index: 1;
+    position: absolute;
+    z-index: 1;
 }
 
 .icon .arrow {
-  left: 22px;
-  top: 8px;
-  width: 4px;
-  height: 24px;
-  border-radius: 1px;
-  background: #fff;
-  transform: translateY(calc(var(--arrow-y) * 1px)) translateZ(0);
+    left: 11px;
+    top: 4px;
+    width: 2px;
+    height: 12px;
+    border-radius: 1px;
+    background: #fff;
+    transform: translateY(calc(var(--arrow-y) * 1px)) translateZ(0);
 }
 
 .icon .arrow:before,
 .icon .arrow:after {
-  content: "";
-  width: 4px;
-  height: 14px;
-  position: absolute;
-  left: 0;
-  top: var(--arrow-top);
-  border-radius: 1px;
-  background: inherit;
-  transform-origin: 2px 1px;
-  transform: rotate(var(--r, calc(var(--arrow-rotate) * 1deg)));
+    content: "";
+    width: 2px;
+    height: 7px;
+    position: absolute;
+    left: 0;
+    top: var(--arrow-top);
+    border-radius: 1px;
+    background: inherit;
+    transform-origin: 1px 1px;
+    transform: rotate(var(--r, calc(var(--arrow-rotate) * 1deg)));
 }
 
 .icon .arrow:after {
-  --r: calc(var(--arrow-rotate) * -1deg);
+    --r: calc(var(--arrow-rotate) * -1deg);
 }
 
 .icon .line {
-  width: 48px;
-  height: 48px;
-  left: 0;
-  top: 14px;
-  fill: none;
-  stroke: #fff;
-  stroke-width: 2;
-  stroke-linejoin: round;
-  stroke-linecap: round;
+    width: 24px;
+    height: 24px;
+    left: 0;
+    top: 7px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
 }
 
 
 /* Footer */
 .footer {
   padding: var(--space-16) 0 var(--space-8);
-  background: rgb(25, 23, 23);
+  background: #1A202F;
   color: var(--gray-300);
   position: relative;
   overflow: hidden;
@@ -1223,7 +1257,7 @@ body.light-theme {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgb(25, 23, 23);
+  background: #1A202F;
   pointer-events: none;
 }
 
@@ -1448,7 +1482,7 @@ body.light-theme {
 .hero-text,
 .feature-card {
   animation: fadeInUp 0.6s ease forwards;
-  
+
 }
 
 .feature-card:nth-child(2) {
@@ -1522,6 +1556,7 @@ section {
 #scrollBottomBtn {
   bottom: calc(var(--space-5) + 60px);
 }
+
 .scroll-btn svg {
   width: 28px;
   height: 28px;
