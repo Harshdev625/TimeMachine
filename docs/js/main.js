@@ -1,26 +1,79 @@
-// Landing Page JavaScript
-document.addEventListener('DOMContentLoaded', function() {
-    // Mobile menu toggle
+document.addEventListener('DOMContentLoaded', function () {
+    const themeToggleInput = document.getElementById('toggle');
+    const themeToggleButton = document.getElementById('theme-toggle-button');
+
+    if (themeToggleInput && themeToggleButton) {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+
+        if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
+            document.body.classList.add('light-theme');
+            themeToggleInput.checked = false;
+        } else {
+            document.body.classList.remove('light-theme');
+            themeToggleInput.checked = true;
+        }
+
+        themeToggleInput.addEventListener('change', () => {
+            if (themeToggleInput.checked) {
+                document.body.classList.remove('light-theme');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.add('light-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    }
+
+
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
 
     if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
+        +        mobileMenuBtn.addEventListener('click', () => {
+            if (navLinks) navLinks.classList.toggle('active');
             mobileMenuBtn.classList.toggle('active');
         });
     }
 
-    // Smooth scrolling for navigation links
+    const heroCard = document.querySelector('.hero-card');
+    const cardGlow = heroCard?.querySelector('.card-glow');
+
+    if (heroCard && cardGlow) {
+        heroCard.addEventListener('mousemove', (e) => {
+            const rect = heroCard.getBoundingClientRect();
+            const cardCenterX = rect.left + rect.width / 2;
+            const cardCenterY = rect.top + rect.height / 2;
+            const deltaX = e.clientX - cardCenterX;
+            const deltaY = e.clientY - cardCenterY;
+
+            const moveX = -deltaX * 0.6;
+            const moveY = -deltaY * 0.6;
+
+            const glowX = deltaX * 0.03;
+            const glowY = deltaY * 0.03;
+
+            heroCard.style.transform = `translateX(calc(-80px + ${moveX}px)) translateY(${moveY}px) scale(0.97) rotateY(-8deg)`;
+            cardGlow.style.transform = `translate(calc(-50% + ${glowX}px), calc(-50% + ${glowY}px))`;
+        });
+
+        heroCard.addEventListener('mouseleave', () => {
+            heroCard.style.transform = 'translateX(0px) translateY(0px) scale(1) rotateY(0deg)';
+            cardGlow.style.transform = 'translate(-50%, -50%)';
+        });
+    }
+
+
+
     const navLinksElements = document.querySelectorAll('.nav-link[href^="#"]');
     navLinksElements.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             const targetSection = document.querySelector(targetId);
-            
+
             if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 80; // Account for fixed nav
+                const offsetTop = targetSection.offsetTop - 80;
                 window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
@@ -29,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Setting up Lottie Animations 
+
     const lottieAnimations = [
         { id: 'lottie-tracking', path: 'assets/lottie/timeTracker.json' },
         { id: 'lottie-focus', path: 'assets/lottie/target.json' },
@@ -54,36 +107,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-    // Modern screenshot card interactions
-    const screenshotCards = document.querySelectorAll('.screenshot-card');
-    
-    screenshotCards.forEach((card, index) => {
-        card.addEventListener('click', function() {
-            // Add click animation
-            this.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 150);
-            
-            // Track feature interaction
-            const feature = this.dataset.feature;
-            
-            // You can add analytics tracking here
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'feature_view', {
-                    event_category: 'Screenshots',
-                    event_label: feature
-                });
-            }
-        });
-        
-        // Add staggered entrance animation
-        card.style.animationDelay = `${index * 0.1}s`;
-    });
-
-    // Navbar background on scroll
     const navbar = document.querySelector('.navbar');
-    
+
     function updateNavbar() {
         if (window.scrollY > 50) {
             navbar.classList.add('scrolled');
@@ -94,13 +119,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.addEventListener('scroll', updateNavbar);
 
-    // Intersection Observer for animations
+
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     };
 
-    const observer = new IntersectionObserver(function(entries) {
+    const observer = new IntersectionObserver(function (entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate-in');
@@ -108,31 +133,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, observerOptions);
 
-    // Observe elements for animation
+
     const animateElements = document.querySelectorAll('.feature-card, .screenshot-item, .section-header');
     animateElements.forEach(el => observer.observe(el));
 
-    // Parallax effect for hero section (subtle)
+
     const hero = document.querySelector('.hero');
-    
-    function parallaxEffect() {
-        const scrolled = window.pageYOffset;
-        const rate = scrolled * -0.3;
-        
-        if (hero) {
-            hero.style.transform = `translateY(${rate}px)`;
-        }
-    }
 
-    // Only add parallax on desktop for performance
-    if (window.innerWidth > 1024) {
-        window.addEventListener('scroll', parallaxEffect);
-    }
 
-    // Track download clicks (you can integrate with analytics)
     const downloadBtns = document.querySelectorAll('a[href*="chromewebstore"]');
     downloadBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             // You can add Google Analytics or other tracking here
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'click', {
@@ -147,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const images = document.querySelectorAll('img[src*="assets/"]');
     images.forEach(img => {
         // Handle error state - show fallback instead of hiding
-        img.addEventListener('error', function() {
+        img.addEventListener('error', function () {
             console.warn('Failed to load image:', this.src);
             // Don't hide the image, let onerror attribute handle fallback
         });
@@ -168,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         init() {
             if (!this.container) return;
-            
+
             this.setupInfiniteLoop();
             this.bindEvents();
             this.updateCarousel();
@@ -179,20 +190,20 @@ document.addEventListener('DOMContentLoaded', function() {
             // Clone first and last slides for seamless infinite loop
             const firstSlide = this.slides[0].cloneNode(true);
             const lastSlide = this.slides[this.totalSlides - 1].cloneNode(true);
-            
+
             // Add cloned slides
             this.container.appendChild(firstSlide); // Add first slide to end
             this.container.insertBefore(lastSlide, this.slides[0]); // Add last slide to beginning
-            
+
             // Update container width for new slides (7 slides now: clone, 1, 2, 3, 4, 5, clone)
             this.container.style.width = '700%'; // 7 slides
-            
+
             // Update slide width
             const allSlides = this.container.querySelectorAll('.carousel-slide');
             allSlides.forEach(slide => {
                 slide.style.width = '14.2857%'; // 100% / 7 slides
             });
-            
+
             // Start at the real first slide (index 1, since we added a clone at index 0)
             this.currentSlide = 1;
             this.container.style.transform = `translateX(-${this.currentSlide * 14.2857}%)`;
@@ -226,18 +237,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateCarousel(skipTransition = false) {
             if (this.isAnimating || !this.container) return;
-            
+
             this.isAnimating = true;
             const slideWidth = 14.2857; // 100% / 7 slides
             const translateX = -this.currentSlide * slideWidth;
-            
+
             // Apply or skip transition
             if (skipTransition) {
                 this.container.style.transition = 'none';
             } else {
                 this.container.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
             }
-            
+
             this.container.style.transform = `translateX(${translateX}%)`;
 
             // Update dots (convert carousel index to real slide index)
@@ -362,7 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // --- Click Event Listeners ---
-    
+
     // Smoothly scroll to the top of the page
     scrollTopBtn.addEventListener('click', () => {
         window.scrollTo({
@@ -449,107 +460,107 @@ document.head.appendChild(style);
 
 // Register GSAP Plugin
 if (window.gsap && window.Physics2DPlugin) {
-  gsap.registerPlugin(Physics2DPlugin);
+    gsap.registerPlugin(Physics2DPlugin);
 } else if (window.gsap) {
-  // Fallback: If Physics2DPlugin is not available, create a simple fallback
-  console.warn('Physics2DPlugin not available, using fallback animation');
+    // Fallback: If Physics2DPlugin is not available, create a simple fallback
+    console.warn('Physics2DPlugin not available, using fallback animation');
 }
 
 document.querySelectorAll('.btn').forEach(button => {
-  const icon = button.querySelector('.icon');
-  if (!icon) return;
-  const line = icon.querySelector('.line');
-  const svgPath = new Proxy({ y: null }, {
-    set(target, key, value) {
-      target[key] = value;
-      if (target.y !== null) {
-        line.innerHTML = getPath(target.y, .25);
-      }
-      return true;
-    }
-  });
+    const icon = button.querySelector('.icon');
+    if (!icon) return;
+    const line = icon.querySelector('.line');
+    const svgPath = new Proxy({ y: null }, {
+        set(target, key, value) {
+            target[key] = value;
+            if (target.y !== null) {
+                line.innerHTML = getPath(target.y, .25);
+            }
+            return true;
+        }
+    });
 
-  svgPath.y = 12;
+    svgPath.y = 12;
 
-  const tl = gsap.timeline({ paused: true });
-  tl.to(icon, {
-    '--arrow-y': 6,
-    '--arrow-rotate': 150,
-    ease: "elastic.in(1.1, .8)",
-    duration: .7,
-    onComplete() { particles(icon, 6, 10, 18, -60, -120); }
-  }).to(icon, {
-    '--arrow-y': 0,
-    '--arrow-rotate': 135,
-    ease: "elastic.out(1.1, .8)",
-    duration: .7
-  });
+    const tl = gsap.timeline({ paused: true });
+    tl.to(icon, {
+        '--arrow-y': 6,
+        '--arrow-rotate': 150,
+        ease: "elastic.in(1.1, .8)",
+        duration: .7,
+        onComplete() { particles(icon, 6, 10, 18, -60, -120); }
+    }).to(icon, {
+        '--arrow-y': 0,
+        '--arrow-rotate': 135,
+        ease: "elastic.out(1.1, .8)",
+        duration: .7
+    });
 
-  tl.to(svgPath, { y: 15, duration: .15 }, .65)
-    .to(svgPath, { y: 12, ease: "elastic.out(1.2, .7)", duration: .6 }, .8);
+    tl.to(svgPath, { y: 15, duration: .15 }, .65)
+        .to(svgPath, { y: 12, ease: "elastic.out(1.2, .7)", duration: .6 }, .8);
 
-  let interval;
-  button.addEventListener('mouseover', () => {
-    tl.restart();
-    interval = setInterval(() => tl.restart(), 1500);
-  });
-  button.addEventListener('mouseout', () => clearInterval(interval));
+    let interval;
+    button.addEventListener('mouseover', () => {
+        tl.restart();
+        interval = setInterval(() => tl.restart(), 1500);
+    });
+    button.addEventListener('mouseout', () => clearInterval(interval));
 
-  window.addEventListener('load', () => {
-    tl.restart();
-    setInterval(() => tl.restart(), 1500); // repeat every 1.5s
+    window.addEventListener('load', () => {
+        tl.restart();
+        setInterval(() => tl.restart(), 1500); // repeat every 1.5s
     });
 
 
-  function getPath(update, smoothing) {
-    const points = [[5, 12], [12, update], [19, 12]];
-    const d = points.reduce((acc, point, i, a) =>
-      i === 0 ? `M ${point[0]},${point[1]}` : `${acc} ${getPoint(point, i, a, smoothing)}`, '');
-    return `<path d="${d}" />`;
-  }
-
-  function getPoint(point, i, a, smoothing) {
-    const cp = (current, previous, next, reverse) => {
-      const p = previous || current;
-      const n = next || current;
-      const o = {
-        length: Math.sqrt(Math.pow(n[0] - p[0], 2) + Math.pow(n[1] - p[1], 2)),
-        angle: Math.atan2(n[1] - p[1], n[0] - p[0])
-      };
-      const angle = o.angle + (reverse ? Math.PI : 0);
-      const length = o.length * smoothing;
-      return [current[0] + Math.cos(angle) * length, current[1] + Math.sin(angle) * length];
-    };
-    const cps = cp(a[i - 1], a[i - 2], point, false);
-    const cpe = cp(point, a[i - 1], a[i + 1], true);
-    return `C ${cps[0]},${cps[1]} ${cpe[0]},${cpe[1]} ${point[0]},${point[1]}`;
-  }
-
-  function particles(parent, quantity, x, y, minAngle, maxAngle) {
-    const minScale = .07, maxScale = .5;
-    for (let i = quantity - 1; i >= 0; i--) {
-      const angle = minAngle + Math.random() * (maxAngle - minAngle);
-      const scale = minScale + Math.random() * (maxScale - minScale);
-      const velocity = 12 + Math.random() * (80 - 60);
-      const dot = document.createElement('div');
-      dot.className = 'dot';
-      parent.appendChild(dot);
-      gsap.set(dot, { opacity: 1, x, y, scale });
-      
-      // Use physics2D if available, otherwise fallback to simple animation
-      if (window.Physics2DPlugin && gsap.plugins.physics2D) {
-        gsap.timeline({ onComplete: () => dot.remove() })
-          .to(dot, 1.2, { physics2D: { angle, velocity, gravity: 20 } })
-          .to(dot, .4, { opacity: 0 }, .8);
-      } else {
-        // Fallback animation without physics2D
-        const radians = angle * Math.PI / 180;
-        const endX = x + Math.cos(radians) * velocity * 2;
-        const endY = y + Math.sin(radians) * velocity * 2;
-        gsap.timeline({ onComplete: () => dot.remove() })
-          .to(dot, 1.2, { x: endX, y: endY, ease: "power2.out" })
-          .to(dot, .4, { opacity: 0 }, .8);
-      }
+    function getPath(update, smoothing) {
+        const points = [[5, 12], [12, update], [19, 12]];
+        const d = points.reduce((acc, point, i, a) =>
+            i === 0 ? `M ${point[0]},${point[1]}` : `${acc} ${getPoint(point, i, a, smoothing)}`, '');
+        return `<path d="${d}" />`;
     }
-  }
+
+    function getPoint(point, i, a, smoothing) {
+        const cp = (current, previous, next, reverse) => {
+            const p = previous || current;
+            const n = next || current;
+            const o = {
+                length: Math.sqrt(Math.pow(n[0] - p[0], 2) + Math.pow(n[1] - p[1], 2)),
+                angle: Math.atan2(n[1] - p[1], n[0] - p[0])
+            };
+            const angle = o.angle + (reverse ? Math.PI : 0);
+            const length = o.length * smoothing;
+            return [current[0] + Math.cos(angle) * length, current[1] + Math.sin(angle) * length];
+        };
+        const cps = cp(a[i - 1], a[i - 2], point, false);
+        const cpe = cp(point, a[i - 1], a[i + 1], true);
+        return `C ${cps[0]},${cps[1]} ${cpe[0]},${cpe[1]} ${point[0]},${point[1]}`;
+    }
+
+    function particles(parent, quantity, x, y, minAngle, maxAngle) {
+        const minScale = .07, maxScale = .5;
+        for (let i = quantity - 1; i >= 0; i--) {
+            const angle = minAngle + Math.random() * (maxAngle - minAngle);
+            const scale = minScale + Math.random() * (maxScale - minScale);
+            const velocity = 60 + Math.random() * (80 - 60);
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            parent.appendChild(dot);
+            gsap.set(dot, { opacity: 1, x, y, scale });
+
+            // Use physics2D if available, otherwise fallback to simple animation
+            if (window.Physics2DPlugin && gsap.plugins.physics2D) {
+                gsap.timeline({ onComplete: () => dot.remove() })
+                    .to(dot, 1.2, { physics2D: { angle, velocity, gravity: 20 } })
+                    .to(dot, .4, { opacity: 0 }, .8);
+            } else {
+                // Fallback animation without physics2D
+                const radians = angle * Math.PI / 180;
+                const endX = x + Math.cos(radians) * velocity * 2;
+                const endY = y + Math.sin(radians) * velocity * 2;
+                gsap.timeline({ onComplete: () => dot.remove() })
+                    .to(dot, 1.2, { x: endX, y: endY, ease: "power2.out" })
+                    .to(dot, .4, { opacity: 0 }, .8);
+            }
+        }
+    }
 });
