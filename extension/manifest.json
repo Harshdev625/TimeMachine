@@ -15,7 +15,7 @@
     "notifications"
   ],
   "oauth2": {
-    "client_id": "<google client id>",
+    "client_id": "1042290616625-ehk16f42jqriqg0ubb237n3r0352mm3p.apps.googleusercontent.com",
     "scopes": [
       "openid",
       "email",
