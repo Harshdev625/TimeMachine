@@ -2,6 +2,25 @@
 
 All notable changes to TimeMachine will be documented in this file.
 
+## [1.6.1] - 2025-10-13
+
+### Added
+- Google OAuth integration for seamless sign-in experience
+- "Continue with Google" button in authentication flow
+- Enhanced backend Google OAuth endpoint with proper token verification
+- Chrome Identity API integration for secure Google authentication
+
+### Improved
+- Authentication flow now supports both email/password and Google OAuth
+- Token storage and management for Google-authenticated users
+- Backend user creation for Google OAuth users with proper defaults
+- Error handling and user feedback for Google authentication failures
+
+### Security
+- Google ID token validation using official Google Auth library
+- Secure token exchange between extension and backend
+- Proper OAuth2 client configuration in manifest
+
 ## [1.6.0]
 
 ### Added

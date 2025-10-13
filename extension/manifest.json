@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TimeMachine",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "homepage_url": "https://harshdev625.github.io/TimeMachine/",
   "description": "Track your browsing habits and boost productivity with insightful stats.",
   "permissions": [
