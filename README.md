@@ -17,22 +17,12 @@ Smart Time Tracking & Productivity Management for Chrome
 <a href="https://hacktoberfest.com/"><img src="https://img.shields.io/badge/Hacktoberfest-2025-orange" alt="Hacktoberfest"></a>
 </p>
 
-Overview • Features • Installation • For Developers • License
+Overview • Features • Getting Started • Contributing • License
 
 </div>
 
 📖 Overview
 TimeMachine is an open-source Chrome extension that helps you understand and optimize your digital habits. It automatically tracks website activity, provides insightful analytics, enables focus management with a Pomodoro-style timer, and generates comprehensive reports—all while fiercely protecting your privacy.
-
-<div align="center">
-<img src="https://www.google.com/search?q=https://raw.githubusercontent.com/Harshdev625/TimeMachine/main/docs/assets/dashboard.png" alt="TimeMachine Dashboard Preview" width="80%">
-
-
-
-
-
-<em>A preview of the analytics dashboard.</em>
-</div>
 
 🎯 Why TimeMachine?
 Privacy First: We never store full URLs, only domains and time spent. Your browsing data is yours alone.
@@ -102,28 +92,119 @@ In-App Guide: Built-in help to get you started.
 
 </details>
 
-🚀 Installation & Usage
+🚀 Getting Started
+This guide will help you get TimeMachine up and running, whether you're a user or a developer.
+
 For Users
-The easiest way to get started is to install TimeMachine from the Chrome Web Store.
+The easiest way to get started is to install TimeMachine directly from the Chrome Web Store.
 
-<a href="https://chromewebstore.google.com/detail/timemachine/hjkicompionnablkpkgnplnacnnchjij">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Install%2520Now-brightgreen%3Fstyle%3Dfor-the-badge%26logo%3Dgooglechrome" alt="Install from Chrome Web Store">
-</a>
+➡️ Install from the Chrome Web Store
 
-Click the button above and "Add to Chrome".
+Click the link above and "Add to Chrome".
 
 Click the extension icon in your toolbar and sign up.
 
 That's it! Tracking begins automatically.
 
-For Developers
-If you want to contribute or run the project locally, please see the Developer Quick Start guide below.
+For Developers & Contributors
+Want to run the project locally or contribute changes? Follow these steps.
 
-👨‍💻 For Developers & Contributors
-We're thrilled you want to contribute! Here’s everything you need to get started.
+1. Clone the Repository
+
+# Clone the repository to your local machine
+git clone [https://github.com/Harshdev625/TimeMachine.git](https://github.com/Harshdev625/TimeMachine.git)
+cd TimeMachine
+
+2. Backend Setup (API Server)
+
+# Navigate to the backend directory
+cd backend
+
+# Install all necessary dependencies
+npm install
+
+# Create your environment file from the example
+cp .env.example .env
+
+Configure Your .env File:
+Open the .env file and add your secret keys.
+
+# .env
+
+# MONGODB_URI: Your MongoDB connection string.
+# For a local database, this is usually all you need.
+MONGODB_URI=mongodb://localhost:27017/timemachine
+
+# JWT_SECRET: A long, random, and secret string for signing authentication tokens.
+# Use a password generator or run this command in your terminal: openssl rand -hex 32
+JWT_SECRET=your-super-secret-key-that-is-very-long-and-random
+
+Start the Backend Server:
+
+# This will start the server on localhost, typically port 3000
+npm run dev
+
+3. Frontend Setup (Chrome Extension)
+
+Open Google Chrome and navigate to chrome://extensions.
+
+Enable "Developer mode" using the toggle in the top-right corner.
+
+Click the "Load unpacked" button.
+
+Select the TimeMachine/extension folder from where you cloned the repository.
+
+The TimeMachine icon should now appear in your browser's toolbar!
+
+🤝 Contributing
+We welcome contributions of all kinds! Whether you're fixing a bug, adding a new feature, or improving documentation, your help is appreciated.
+
+Contribution Workflow
+Here’s the typical workflow for contributing to TimeMachine:
+
+1. Fork the Repo 🍴
+      │
+      └─> 2. Clone your fork locally 💻
+            │
+            └─> 3. Create a new branch (e.g., feature/new-theme) 🌿
+                  │
+                  └─> 4. Make your changes (Code, test, repeat) 👨‍💻
+                        │
+                        └─> 5. Commit your changes with a clear message 📝
+                              │
+                              └─> 6. Push your branch to your fork on GitHub 🚀
+                                    │
+                                    └─> 7. Open a Pull Request (PR) to the main repo 📫
+                                          │
+                                          └─> 8. Get feedback, discuss, and merge! 🎉
+
+High-Level Data Flow
+Understanding how data moves through the system is key to contributing effectively.
+
+┌───────────────────────────┐      ┌──────────────────────────┐      ┌────────────────────┐
+│ Chrome Extension          │      │ Node.js Backend (API)    │      │ MongoDB Database   │
+│ (background.js)           │      │                          │      │                    │
+├───────────────────────────┤      ├──────────────────────────┤      ├────────────────────┤
+│ 1. Track active tab time  ├───────► 2. Receive data via      ├───────► 3. Store/Update   │
+│    & user activity        │      │    REST API (/api/sync)    │      │    TimeData, Users,│
+│                           │      │                          │      │    etc.            │
+│ 4. Periodically sync data │◄─────── 5. Send back confirmation │      │                    │
+│    (every 5 mins)         │      │    (200 OK)              │      └────────────────────┘
+└───────────────────────────┘      └──────────────────────────┘
+
+How You Can Contribute
+🐛 Bug Fixes: Check the Issues tab for any open bugs. If you find a new one, please report it!
+
+✨ New Features: Have an idea for a new feature? Open an issue to discuss it first.
+
+🎨 UI/UX Improvements: Help make the extension more beautiful and user-friendly.
+
+📚 Documentation: Improve this README, add guides, or clarify instructions.
+
+Please read our full CONTRIBUTING.md for more detailed guidelines.
 
 <details>
-<summary><strong>Click to expand Tech Stack & Architecture details</strong></summary>
+<summary><strong>Click for more technical details (Tech Stack, Architecture, etc.)</strong></summary>
 
 🛠️ Tech Stack
 Frontend (Extension)
@@ -133,8 +214,6 @@ Manifest: Chrome Extension Manifest V3
 
 Charts: Chart.js
 
-Architecture: Modular design with service workers
-
 Backend (API Server)
 Runtime: Node.js (v14+)
 
@@ -143,111 +222,6 @@ Framework: Express.js
 Database: MongoDB with Mongoose ODM
 
 Authentication: JWT (JSON Web Tokens), bcrypt
-
-Reports: PDFKit, quickchart-js
-
-Key Libraries
-Library
-
-Purpose
-
-Version
-
-express
-
-Backend API framework
-
-^4.18.0
-
-mongoose
-
-MongoDB object modeling
-
-^8.0.0
-
-jsonwebtoken
-
-JWT authentication
-
-^9.0.0
-
-bcrypt
-
-Password hashing
-
-^5.1.0
-
-pdfkit
-
-PDF report generation
-
-^0.15.0
-
-chart.js
-
-Frontend charting
-
-^4.4.0
-
-quickchart-js
-
-Server-side chart images
-
-^3.1.3
-
-🏗️ Architecture Overview
-          Chrome Extension (Frontend)
-                  │
-     ┌────────────┴────────────┐
-┌────▼────┐ ┌─────────┐ ┌──────▼──────┐
-│ Popup UI│ │ Content │ │ Background  │
-│(HTML/CSS) │ Scripts │ │Service Worker│
-└─────────┘ └─────────┘ └──────┬──────┘
-                               │ REST API (HTTPS, JWT)
-                               ▼
-                   Node.js + Express Backend
-                  │
-     ┌────────────┴────────────┐
-┌────▼────┐ ┌─────────┐ ┌──────▼──────┐
-│  Routes │ │  Models │ │    Utils    │
-│  (API)  │ │(Mongoose)│ │(Validation) │
-└─────────┘ └────┬────┘ └─────────────┘
-                 │
-                 ▼
-          MongoDB Database
-(Users, TimeData, FocusSessions, etc.)
-
-</details>
-
-⚡ Developer Quick Start
-1. Backend Setup
-
-# Clone the repository
-git clone [https://github.com/Harshdev625/TimeMachine.git](https://github.com/Harshdev625/TimeMachine.git)
-cd TimeMachine/backend
-
-# Install dependencies
-npm install
-
-# Configure environment variables
-cp .env.example .env
-# Edit .env and set MONGODB_URI and JWT_SECRET
-
-# Start the development server
-npm run dev
-
-2. Extension Setup
-
-Open Chrome and navigate to chrome://extensions.
-
-Enable "Developer mode" (top right toggle).
-
-Click "Load unpacked".
-
-Select the TimeMachine/extension folder from the cloned repository.
-
-<details>
-<summary><strong>Click to see Project Structure & Documentation</strong></summary>
 
 📁 Project Structure
 TimeMachine/
@@ -259,33 +233,10 @@ TimeMachine/
 │   ├── modules/        # Feature-specific JS modules
 │   ├── css/            # Stylesheets and themes
 │   ├── background.js   # Service worker (tracking logic)
-│   ├── manifest.json   # Extension configuration
-│   └── popup.html      # Main UI
+│   └── manifest.json   # Extension configuration
 └── docs/               # Landing page source (GitHub Pages)
 
-📚 Documentation
-🔌 API Endpoints
-Auth: POST /signup, POST /login, GET /profile
-
-Time Tracking: POST /sync, GET /report, PATCH /category
-
-Reports: POST /generate
-
-Focus Sessions: POST /, GET /
-
-Guard/Blocking: GET /, POST /, DELETE /:id
-
-Feedback: POST /submit, GET /my
-
-🗄️ Data Models
-User: Stores email, hashed password, settings, and timezone.
-
-TimeData: Stores domain, total time, and sessions for a user on a specific date.
-
 </details>
-
-🤝 Contributing
-Contributions are welcome! Please read CONTRIBUTING.md for detailed guidelines and follow our Code of Conduct.
 
 👥 Contributors
 A huge thanks to all the amazing people who have contributed to TimeMachine!
