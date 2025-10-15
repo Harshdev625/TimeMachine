@@ -1,9 +1,22 @@
 <div align="center">
 
 ⏳ TimeMachine
-<img src="https://www.google.com/search?q=https://raw.githubusercontent.com/Harshdev625/TimeMachine/main/extension/icon128.png" width="128" height="128" alt="TimeMachine Logo">
+<img src="extension/icon128.png" width="128" height="128" alt="TimeMachine Logo">
 
 Smart Time Tracking & Productivity Management for Chrome
+<!-- Tech Stack Badges -->
+
+<!-- Meta & Social Badges -->
+
+<p>
+<a href="https://harshdev625.github.io/TimeMachine/"><img src="https://img.shields.io/badge/Website-Live-blue" alt="Website"></a>
+<a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-1.6.0-blue.svg" alt="Version"></a>
+<a href="https://www.google.com/search?q=LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
+<a href="https://github.com/Harshdev625/TimeMachine/graphs/contributors"><img src="https://img.shields.io/github/contributors/Harshdev625/TimeMachine" alt="Contributors"></a>
+<a href="https://www.google.com/search?q=CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+<a href="https://hacktoberfest.com/"><img src="https://img.shields.io/badge/Hacktoberfest-2025-orange" alt="Hacktoberfest"></a>
+</p>
+
 Overview • Features • Installation • For Developers • License
 
 </div>
@@ -12,9 +25,13 @@ Overview • Features • Installation • For Developers • License
 TimeMachine is an open-source Chrome extension that helps you understand and optimize your digital habits. It automatically tracks website activity, provides insightful analytics, enables focus management with a Pomodoro-style timer, and generates comprehensive reports—all while fiercely protecting your privacy.
 
 <div align="center">
+<img src="https://www.google.com/search?q=https://raw.githubusercontent.com/Harshdev625/TimeMachine/main/docs/assets/dashboard.png" alt="TimeMachine Dashboard Preview" width="80%">
 
-A preview of the analytics dashboard.
 
+
+
+
+<em>A preview of the analytics dashboard.</em>
 </div>
 
 🎯 Why TimeMachine?
@@ -88,6 +105,10 @@ In-App Guide: Built-in help to get you started.
 🚀 Installation & Usage
 For Users
 The easiest way to get started is to install TimeMachine from the Chrome Web Store.
+
+<a href="https://chromewebstore.google.com/detail/timemachine/hjkicompionnablkpkgnplnacnnchjij">
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Install%2520Now-brightgreen%3Fstyle%3Dfor-the-badge%26logo%3Dgooglechrome" alt="Install from Chrome Web Store">
+</a>
 
 Click the button above and "Add to Chrome".
 
