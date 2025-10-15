@@ -161,25 +161,29 @@ We welcome contributions of all kinds! Whether you're fixing a bug, adding a new
 Contribution Workflow
 Here’s the typical workflow for contributing to TimeMachine:
 
-1. Fork the Repo 🍴
-   │
-   └─> 2. Clone your fork locally 💻
-       │
-       └─> 3. Create a new branch (e.g., feature/new-theme) 🌿
-           │
-           └─> 4. Make your changes (Code, test, repeat) 👨‍💻
-               │
-               └─> 5. Commit your changes with a clear message 📝
-                   │
-                   └─> 6. Push your branch to your fork on GitHub 🚀
-                       │
-                       └─> 7. Open a Pull Request (PR) to the main repo 📫
-                           │
-                           └─> 8. Get feedback, discuss, and merge! 🎉
+<pre><code>
+
+Fork the Repo 🍴
+│
+└─> 2. Clone your fork locally 💻
+│
+└─> 3. Create a new branch (e.g., feature/new-theme) 🌿
+│
+└─> 4. Make your changes (Code, test, repeat) 👨‍💻
+│
+└─> 5. Commit your changes with a clear message 📝
+│
+└─> 6. Push your branch to your fork on GitHub 🚀
+│
+└─> 7. Open a Pull Request (PR) to the main repo 📫
+│
+└─> 8. Get feedback, discuss, and merge! 🎉
+</code></pre>
 
 High-Level Data Flow
 Understanding how data moves through the system is key to contributing effectively.
 
+<pre><code>
 ┌───────────────────────────┐      ┌──────────────────────────┐      ┌────────────────────┐
 │ Chrome Extension          │      │ Node.js Backend (API)    │      │ MongoDB Database   │
 │ (background.js)           │      │                          │      │                    │
@@ -190,6 +194,7 @@ Understanding how data moves through the system is key to contributing effective
 │ 4. Periodically sync data │◄─────── 5. Send back confirmation │      │                    │
 │    (every 5 mins)         │      │    (200 OK)              │      └────────────────────┘
 └───────────────────────────┘      └──────────────────────────┘
+</code></pre>
 
 How You Can Contribute
 🐛 Bug Fixes: Check the Issues tab for any open bugs. If you find a new one, please report it!
