@@ -1,6 +1,5 @@
 <div align="center">
 
-⏳ TimeMachine
 <img src="extension/icon128.png" width="128" height="128" alt="TimeMachine Logo">
 
 Smart Time Tracking & Productivity Management for Chrome
@@ -163,20 +162,20 @@ Contribution Workflow
 Here’s the typical workflow for contributing to TimeMachine:
 
 1. Fork the Repo 🍴
-      │
-      └─> 2. Clone your fork locally 💻
-            │
-            └─> 3. Create a new branch (e.g., feature/new-theme) 🌿
-                  │
-                  └─> 4. Make your changes (Code, test, repeat) 👨‍💻
-                        │
-                        └─> 5. Commit your changes with a clear message 📝
-                              │
-                              └─> 6. Push your branch to your fork on GitHub 🚀
-                                    │
-                                    └─> 7. Open a Pull Request (PR) to the main repo 📫
-                                          │
-                                          └─> 8. Get feedback, discuss, and merge! 🎉
+   │
+   └─> 2. Clone your fork locally 💻
+       │
+       └─> 3. Create a new branch (e.g., feature/new-theme) 🌿
+           │
+           └─> 4. Make your changes (Code, test, repeat) 👨‍💻
+               │
+               └─> 5. Commit your changes with a clear message 📝
+                   │
+                   └─> 6. Push your branch to your fork on GitHub 🚀
+                       │
+                       └─> 7. Open a Pull Request (PR) to the main repo 📫
+                           │
+                           └─> 8. Get feedback, discuss, and merge! 🎉
 
 High-Level Data Flow
 Understanding how data moves through the system is key to contributing effectively.
