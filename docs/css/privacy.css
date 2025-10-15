@@ -710,7 +710,7 @@ body {
 .content-section {
     opacity: 0;
     transform: translateY(20px);
-    animation: fadeInUp 0.6s ease forwards;
+    animation: fadeInUp 0.4s ease forwards;
   }
   .content-section:nth-child(2) { animation-delay: 0.1s; }
   .content-section:nth-child(3) { animation-delay: 0.2s; }
@@ -762,7 +762,7 @@ body {
     border-radius: 12px;
     background: linear-gradient(90deg, #4facfe, #00f2fe, #8b5cf6) border-box;
     background-size: 300% 300%;
-    animation: gradientBorder 6s linear infinite;
+    animation: gradientBorder 3.5s linear infinite;
   }
 
   @keyframes gradientBorder {
@@ -818,31 +818,27 @@ body {
   }
   
   .section-title {
-    color: var(--gray-900);
-    font-weight: 700;
     display: inline-block;
     position: relative;
-    line-height: 1.1;
-    transition: color 200ms var(--transition-fast);
   }
   
   .section-title::after {
     content: "";
-    display: block;
-    height: 4px;
-    width: 72px;
-    margin-top: 8px;
-    border-radius: 3px;
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    height: 3px;
+    width: 100%; /* covers full heading text width */
+    border-radius: 2px;
     background: linear-gradient(90deg, var(--primary-500), var(--secondary-500));
-    transition: transform 300ms var(--transition-normal), opacity 200ms var(--transition-fast);
-    transform-origin: left center;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: left;
   }
-  
   .section-title:hover::after {
-    transform: scaleX(1.12);
-    opacity: 0.98;
+    transform: scaleX(1.1);
+    opacity: 0.9;
   }
-  
+
   @media (max-width: 640px) {
     .section-title::after { width: 56px; height: 3px; margin-top: 6px; }
   }
