@@ -40,7 +40,7 @@
             class="auth-input"
           />
         </div>
-        <div class="input-group">
+        <div class="input-group" id="passwordGroup">
           <input
             id="userPasswordInput"
             type="password"
@@ -48,15 +48,33 @@
             class="auth-input"
           />
         </div>
+        <div class="input-group hidden" id="otpGroup">
+          <input
+            id="userOtpInput"
+            type="text"
+            placeholder="Enter 6-digit OTP"
+            class="auth-input"
+            maxlength="6"
+            pattern="[0-9]{6}"
+          />
+        </div>
         <p id="emailError" class="auth-error"></p>
         <button id="saveEmailBtn" class="btn primary">
           Sign In <span class="btn-icon">→</span>
+        </button>
+        <button id="requestOtpBtn" class="btn secondary hidden">
+          Request OTP <span class="btn-icon">📧</span>
         </button>
         <div class="oauth-divider"><span>or</span></div>
         <button id="googleSignInBtn" class="btn oauth-btn">
           <span class="btn-icon" aria-hidden="true">G</span>
           <span class="btn-text">Continue with Google</span>
         </button>
+        <div class="auth-toggle-container">
+          <button id="toggleOtpMode" class="auth-toggle-link">
+            Login with OTP instead
+          </button>
+        </div>
         <div class="auth-toggle-container">
           <button id="toggleAuthMode" class="auth-toggle-link">
             Don't have an account? Sign up

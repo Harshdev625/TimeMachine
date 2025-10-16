@@ -29,7 +29,8 @@ const CONFIG = {
 
 const ELEMENTS = {
   emailPrompt: 'emailPrompt', mainApp: 'mainApp', userEmailInput: 'userEmailInput', userPasswordInput: 'userPasswordInput',
-  toggleAuthMode: 'toggleAuthMode', saveEmailBtn: 'saveEmailBtn', emailError: 'emailError', errorDisplay: 'errorDisplay',
+  userOtpInput: 'userOtpInput', passwordGroup: 'passwordGroup', otpGroup: 'otpGroup', requestOtpBtn: 'requestOtpBtn',
+  toggleOtpMode: 'toggleOtpMode', toggleAuthMode: 'toggleAuthMode', saveEmailBtn: 'saveEmailBtn', emailError: 'emailError', errorDisplay: 'errorDisplay',
   toggleThemeBtn: 'toggleThemeBtn', themeDropdown: 'themeDropdown', themeOptions: '.theme-option', updateNotification: 'updateNotification',
   closeNotification: 'closeNotification', updateMessage: 'updateMessage', feedbackToast: 'feedbackToast', emailDisplay: 'emailDisplay',
   userEmailSettings: 'userEmail', updateEmailBtn: 'updateEmailBtn', helpBtn: 'helpBtn', editEmailBtn: 'editEmailBtn',
@@ -151,6 +152,8 @@ function initTheme() {
 function setupEventListeners() {
   const events = [
     { el: ELEMENTS.saveEmailBtn, event: 'click', handler: saveEmail },
+    { el: ELEMENTS.requestOtpBtn, event: 'click', handler: requestOtpHandler },
+    { el: ELEMENTS.toggleOtpMode, event: 'click', handler: toggleOtpMode },
     { el: 'googleSignInBtn', event: 'click', handler: signInWithGoogle },
     { el: ELEMENTS.toggleAuthMode, event: 'click', handler: toggleAuthMode },
     { el: ELEMENTS.toggleThemeBtn, event: 'click', handler: () => getElement(ELEMENTS.themeDropdown).classList.toggle("hidden") },
@@ -226,11 +229,44 @@ function updateThemeDropdown() {
 async function saveEmail() {
   const email = getElement(ELEMENTS.userEmailInput).value.trim();
   const password = getElement(ELEMENTS.userPasswordInput).value;
+  const otp = getElement(ELEMENTS.userOtpInput).value.trim();
   const btn = getElement(ELEMENTS.saveEmailBtn);
   const toggle = getElement(ELEMENTS.toggleAuthMode);
   const isSignupMode = btn?.dataset.mode === 'signup';
+  const isOtpVerify = btn?.dataset.verifyOtp === 'true';
 
   if (!validateEmail(email)) return showError("Invalid email", ELEMENTS.emailError);
+  
+  // Handle OTP verification
+  if (isOtpVerify) {
+    if (!otp || otp.length !== 6) {
+      return showError("Enter valid 6-digit OTP", ELEMENTS.emailError);
+    }
+    
+    try {
+      btn.disabled = true;
+      btn.textContent = "Verifying OTP...";
+      const success = await Auth.verifyOtp(email, otp);
+      if (!success) throw new Error("Invalid OTP");
+
+      await chrome.storage.local.set({ userEmail: email });
+      getElement(ELEMENTS.emailPrompt).classList.add("hidden");
+      getElement(ELEMENTS.mainApp).classList.remove("hidden");
+      showToast("Logged in successfully!");
+      updateEmailUI(email);
+      switchMainTab("analytics");
+      document.dispatchEvent(new CustomEvent('tm-auth-success', { detail: { email } }));
+    } catch (error) {
+      console.error("OTP verification error:", error);
+      showError(error.message, ELEMENTS.emailError);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Verify OTP <span class="btn-icon">✓</span>';
+    }
+    return;
+  }
+  
+  // Handle password-based login/signup
   if (!password) return showError("Enter password", ELEMENTS.emailError);
 
   try {
@@ -616,6 +652,79 @@ function toggleAuthMode() {
   getElement(ELEMENTS.emailError).classList.add('hidden');
   getElement(ELEMENTS.userPasswordInput).value = '';
 }
+
+function toggleOtpMode() {
+  const btn = getElement(ELEMENTS.saveEmailBtn);
+  const requestOtpBtn = getElement(ELEMENTS.requestOtpBtn);
+  const passwordGroup = getElement(ELEMENTS.passwordGroup);
+  const otpGroup = getElement(ELEMENTS.otpGroup);
+  const toggleLink = getElement(ELEMENTS.toggleOtpMode);
+  const tagline = document.getElementById('authTagline');
+  
+  if (!btn || !requestOtpBtn || !passwordGroup || !otpGroup || !toggleLink) return;
+  
+  const currentMode = btn.dataset.otpMode || 'password';
+  const nextMode = currentMode === 'password' ? 'otp' : 'password';
+  btn.dataset.otpMode = nextMode;
+  
+  if (nextMode === 'otp') {
+    // Switch to OTP mode
+    passwordGroup.classList.add('hidden');
+    otpGroup.classList.add('hidden'); // Initially hidden until OTP is requested
+    requestOtpBtn.classList.remove('hidden');
+    btn.classList.add('hidden');
+    toggleLink.textContent = 'Login with Password instead';
+    if (tagline) tagline.textContent = 'Login with One-Time Password';
+  } else {
+    // Switch back to password mode
+    passwordGroup.classList.remove('hidden');
+    otpGroup.classList.add('hidden');
+    requestOtpBtn.classList.add('hidden');
+    btn.classList.remove('hidden');
+    toggleLink.textContent = 'Login with OTP instead';
+    if (tagline) tagline.textContent = 'Sign in to track your productivity';
+  }
+  
+  // Clear error & inputs
+  getElement(ELEMENTS.emailError).classList.add('hidden');
+  getElement(ELEMENTS.userPasswordInput).value = '';
+  getElement(ELEMENTS.userOtpInput).value = '';
+}
+
+async function requestOtpHandler() {
+  const email = getElement(ELEMENTS.userEmailInput).value.trim();
+  const requestBtn = getElement(ELEMENTS.requestOtpBtn);
+  const otpGroup = getElement(ELEMENTS.otpGroup);
+  const verifyBtn = getElement(ELEMENTS.saveEmailBtn);
+  
+  if (!validateEmail(email)) {
+    return showError("Invalid email", ELEMENTS.emailError);
+  }
+  
+  try {
+    requestBtn.disabled = true;
+    requestBtn.textContent = 'Sending OTP...';
+    
+    await Auth.requestOtp(email);
+    
+    // Show OTP input and verify button
+    otpGroup.classList.remove('hidden');
+    verifyBtn.classList.remove('hidden');
+    verifyBtn.innerHTML = 'Verify OTP <span class="btn-icon">✓</span>';
+    verifyBtn.dataset.verifyOtp = 'true';
+    requestBtn.classList.add('hidden');
+    
+    showToast('OTP sent to your email!');
+    getElement(ELEMENTS.userOtpInput).focus();
+  } catch (error) {
+    console.error('Request OTP error:', error);
+    showError(error.message, ELEMENTS.emailError);
+  } finally {
+    requestBtn.disabled = false;
+    requestBtn.innerHTML = 'Request OTP <span class="btn-icon">📧</span>';
+  }
+}
+
 
 function updateEmailUI(email) {
   getElement(ELEMENTS.emailDisplay).textContent = email;

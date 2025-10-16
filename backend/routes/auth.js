@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const { validateEmail, normalizeEmail, validatePassword } = require('../utils/validation');
 const { v4: uuidv4 } = require('uuid');
 const { OAuth2Client } = require('google-auth-library');
+const { sendMail } = require('../utils/resendMailer');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const BCRYPT_ROUNDS = Number(process.env.BCRYPT_ROUNDS);
@@ -145,6 +146,124 @@ router.post("/google", async (req, res) => {
   } catch (err) {
     console.error("Google Auth Error:", err);
     res.status(500).json({ error: "Google auth failed" });
+  }
+});
+
+
+// OTP Login Routes
+// Step 1: Request OTP - Send OTP to email
+router.post('/request-otp', async (req, res) => {
+  try {
+    const { email } = req.body;
+    console.log('[OTP_REQUEST] incoming request for', email);
+    
+    if (!validateEmail(email)) {
+      return sendBadRequest(res, 'Invalid email format');
+    }
+    
+    const user = await User.findOne({ email: normalizeEmail(email) }).select('+loginOtp +loginOtpExpires');
+    
+    if (!user) {
+      return sendUnauthorized(res, 'No account found with this email');
+    }
+    
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    
+    user.loginOtp = otp;
+    user.loginOtpExpires = otpExpires;
+    await user.save();
+    
+    // Send OTP via email
+    const emailResult = await sendMail(
+      email,
+      'TimeMachine - Your Login OTP',
+      `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #4F46E5;">TimeMachine Login</h2>
+          <p>Your One-Time Password (OTP) for login is:</p>
+          <div style="background-color: #F3F4F6; padding: 20px; text-align: center; margin: 20px 0;">
+            <h1 style="color: #4F46E5; font-size: 32px; letter-spacing: 8px; margin: 0;">${otp}</h1>
+          </div>
+          <p>This OTP will expire in 10 minutes.</p>
+          <p>If you didn't request this OTP, please ignore this email.</p>
+          <hr style="margin-top: 30px; border: none; border-top: 1px solid #E5E7EB;">
+          <p style="color: #6B7280; font-size: 12px;">TimeMachine - Track Your Time, Master Your Life</p>
+        </div>
+      `
+    );
+    
+    if (!emailResult.success) {
+      console.error('[OTP_REQUEST] Email send failed:', emailResult.error);
+      return res.status(500).json({ error: 'Failed to send OTP email' });
+    }
+    
+    console.log('[OTP_REQUEST] OTP sent successfully to', email);
+    res.status(200).json({
+      message: 'OTP sent to your email',
+      email: user.email,
+      expiresIn: 600 // seconds
+    });
+  } catch (error) {
+    console.error('OTP request error:', error);
+    res.status(500).json({ error: 'Server error during OTP request', details: error.message });
+  }
+});
+
+// Step 2: Verify OTP and login
+router.post('/verify-otp', async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    console.log('[OTP_VERIFY] incoming verification for', email);
+    
+    if (!email || !otp) {
+      return sendBadRequest(res, 'Email and OTP are required');
+    }
+    
+    const user = await User.findOne({ email: normalizeEmail(email) }).select('+loginOtp +loginOtpExpires');
+    
+    if (!user) {
+      return sendUnauthorized(res, 'Invalid credentials');
+    }
+    
+    // Check if OTP exists and is not expired
+    if (!user.loginOtp || !user.loginOtpExpires) {
+      return sendUnauthorized(res, 'No OTP found. Please request a new one');
+    }
+    
+    if (new Date() > user.loginOtpExpires) {
+      return sendUnauthorized(res, 'OTP has expired. Please request a new one');
+    }
+    
+    // Verify OTP
+    if (user.loginOtp !== otp.trim()) {
+      return sendUnauthorized(res, 'Invalid OTP');
+    }
+    
+    // Clear OTP after successful verification
+    user.loginOtp = undefined;
+    user.loginOtpExpires = undefined;
+    user.lastActive = new Date();
+    await user.save();
+    
+    // Issue JWT token
+    const token = issueToken(user);
+    
+    console.log('[OTP_VERIFY] Login successful for', email);
+    res.status(200).json({
+      message: 'Login successful',
+      token,
+      email: user.email,
+      user: {
+        email: user.email,
+        role: user.role,
+        timezone: user.timezone
+      }
+    });
+  } catch (error) {
+    console.error('OTP verification error:', error);
+    res.status(500).json({ error: 'Server error during OTP verification', details: error.message });
   }
 });
 
