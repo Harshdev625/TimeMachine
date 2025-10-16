@@ -59,6 +59,20 @@
 .email-prompt .btn.primary .btn-icon { transition: transform .25s ease; }
 .email-prompt .btn.primary:hover .btn-icon { transform: translateX(4px); }
 
+.email-prompt .btn.secondary {
+  width: 100%;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px;
+  font-weight: 600;
+  position: relative;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--accent-2) 10%, transparent));
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+.email-prompt .btn.secondary:hover {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 20%, transparent), color-mix(in srgb, var(--accent-2) 20%, transparent));
+}
+
 .auth-toggle-container { text-align: center; margin-top: 4px; }
 .auth-toggle-link { background: none; border: none; padding: 6px 10px; font: 500 13px var(--font); color: var(--accent); cursor: pointer; transition: var(--transition); }
 .auth-toggle-link:hover { text-decoration: underline; color: var(--accent-2); }

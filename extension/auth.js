@@ -64,6 +64,46 @@ const TokenStorage = {
 const login = async (email, password) => authRequest('login', email, password);
 const signup = async (email, password) => authRequest('signup', email, password);
 
+// OTP-based login functions
+const requestOtp = async (email) => {
+  try {
+    const backendUrl = await resolveBackendUrl();
+    const res = await fetch(`${backendUrl}/api/auth/request-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.message || data.error || 'Failed to send OTP');
+    return { success: true, data };
+  } catch (e) {
+    console.error('Request OTP error:', e);
+    throw e;
+  }
+};
+
+const verifyOtp = async (email, otp) => {
+  try {
+    const backendUrl = await resolveBackendUrl();
+    const res = await fetch(`${backendUrl}/api/auth/verify-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.message || data.error || 'Invalid OTP');
+    if (!data.token) throw new Error('No token received');
+    await TokenStorage.setToken(data.token, email);
+    window.__TM_AUTH_CACHE__ = { last: Date.now(), ok: true };
+    try { chrome.runtime.sendMessage({ action: 'triggerImmediateSync' }); } catch {}
+    return true;
+  } catch (e) {
+    console.error('Verify OTP error:', e);
+    throw e;
+  }
+};
+
+
 // Shared auth request handler
 const authRequest = async (type, email, password) => {
   try {
@@ -190,5 +230,5 @@ const resolveBackendUrl = async () => {
   return renderBase;
 };
 
-window.Auth = { authenticateUser, login, signup, logout, isAuthenticated };
+window.Auth = { authenticateUser, login, signup, logout, isAuthenticated, requestOtp, verifyOtp };
 try { window.TokenStorage = TokenStorage; } catch {}

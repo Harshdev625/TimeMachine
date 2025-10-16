@@ -49,6 +49,14 @@ const userSchema = new mongoose.Schema({
     type: Date,
     select: false
   },
+  loginOtp: {
+    type: String,
+    select: false
+  },
+  loginOtpExpires: {
+    type: Date,
+    select: false
+  },
   settings: {
     receiveReports: {
       type: Boolean,
