@@ -1418,6 +1418,7 @@ body.dark-theme {
   position: relative;
   padding-left: 0;
   text-align: left;
+  padding-right: 18px;
 }
 
 .link-group a::before {
@@ -1438,6 +1439,26 @@ body.dark-theme {
 
 .link-group a:hover::before {
   width: 24px;
+}
+
+.link-group a::after {
+  content: '→';
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  color: var(--gray-400);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: transform var(--transition-fast), opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.link-group a:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--white);
 }
 
 .footer-bottom {
