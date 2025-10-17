@@ -204,7 +204,7 @@ body.dark-theme {
   display: flex;
   justify-content: center;
   
-  /* Original solid design (not scrolled) - Dark Theme */
+  /* Original solid design (not scrolled) - Dark Theme (Default) */
   background: black;
   color: white;
   border-radius: 0 0 0 0;
@@ -216,46 +216,41 @@ body.dark-theme {
 
 /* Original solid design (not scrolled) - Light Theme */
 body.light-theme .navbar {
-  background: white;
-  color: black;
+  background: white !important;
+  color: black !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Glassmorphism ONLY when scrolled - Dark Theme */
-.navbar.scrolled {
+/* Glassmorphism ONLY when scrolled - Dark Theme (Default) */
+body.dark-theme .navbar.scrolled,
+body:not(.light-theme) .navbar.scrolled {
   width: 85%;
   padding: 8px 30px;
   top: 15px;
-  border-radius: 18px;
+  border-radius: 16px;
   
-  /* Enhanced Glassmorphism for Dark Theme */
-  background: linear-gradient(
-    135deg,
-    rgba(15, 23, 42, 0.7) 0%,
-    rgba(30, 41, 59, 0.6) 50%,
-    rgba(15, 23, 42, 0.7) 100%
-  );
-  backdrop-filter: blur(30px) saturate(180%) brightness(1.1);
-  -webkit-backdrop-filter: blur(30px) saturate(180%) brightness(1.1);
-  border: 1px solid rgba(79, 172, 254, 0.3);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 
-    0 8px 32px 0 rgba(0, 0, 0, 0.6),
-    0 0 80px rgba(79, 172, 254, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-  color: white;
+  /* Clean glassmorphism to match screenshot */
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border: 1px solid rgba(79, 172, 254, 0.15) !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.4);
+  color: white !important;
 }
 
 /* Glassmorphism ONLY when scrolled - Light Theme */
 body.light-theme .navbar.scrolled {
-  background: rgba(255, 255, 255, 0.4);
+  width: 85%;
+  padding: 8px 30px;
+  top: 15px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.4) !important;
   backdrop-filter: blur(25px) saturate(200%);
   -webkit-backdrop-filter: blur(25px) saturate(200%);
-  border: 1px solid rgba(209, 213, 219, 0.4);
+  border: 1px solid rgba(209, 213, 219, 0.4) !important;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2),
               0 0 40px rgba(79, 172, 254, 0.1);
-  color: black;
+  color: black !important;
 }
 
 /* Inner Container */
@@ -309,10 +304,10 @@ body.light-theme .navbar.scrolled .logo {
 
 /* Add text shadow only when scrolled for glassmorphism effect */
 .navbar.scrolled .brand-text {
-  text-shadow: 
-    0 0 20px rgba(79, 172, 254, 0.6),
-    0 0 40px rgba(79, 172, 254, 0.4),
-    0 2px 10px rgba(0, 0, 0, 0.5);
+  /* cleaner, subtler glow to match screenshot */
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.55),
+    0 0 18px rgba(100, 200, 255, 0.35);
 }
 
 body.light-theme .navbar.scrolled .brand-text {
@@ -343,20 +338,11 @@ body.light-theme .nav-link:hover {
 
 /* Glassmorphic hover effect when scrolled */
 .navbar.scrolled .nav-link:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(79, 172, 254, 0.4) 0%,
-    rgba(53, 196, 254, 0.35) 50%,
-    rgba(79, 172, 254, 0.4) 100%
-  );
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(79, 172, 254, 0.3);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
   color: white;
-  border: 1px solid rgba(79, 172, 254, 0.5);
-  box-shadow: 
-    0 4px 20px rgba(79, 172, 254, 0.5),
-    0 0 30px rgba(79, 172, 254, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
   transform: translateY(-2px);
 }
 
