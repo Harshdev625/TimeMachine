@@ -262,25 +262,54 @@ body.dark-theme {
 }
 
 
-/* Links */
+
+/* Galaxy Link */
 .nav-link {
-  color: inherit;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 6px 8px;
-  border-radius: 6px;
   position: relative;
-  transition: background-color 0.5s ease, color 0.5s ease, box-shadow 0.5s ease;
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #ff00cc, #3333ff, #00ffee, #ffcc00);
+  background-size: 400% 400%;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  animation: galaxyMove 6s ease infinite;
+  overflow: hidden;
 }
 
+/* On hover — just scale and glow (no tilt) */
 .nav-link:hover {
-  background-color: #35C4FE;
-  color: black;
-
+  transform: scale(1.1);
+  box-shadow: 0 0 25px 6px rgba(255, 0, 200, 0.7);
+  animation: galaxyMove 1.2s linear infinite;
 }
 
-.nav-link::after {
-  content: none;
+/* Aura / Glow Border */
+.nav-link::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  background: linear-gradient(60deg, #ff00cc, #00ffff, #ffff00, #ff6600);
+  background-size: 400% 400%;
+  z-index: -1;
+  filter: blur(6px);
+  opacity: 0.6;
+  animation: galaxyMove 5s linear infinite;
+}
+
+/* Gradient Animation */
+@keyframes galaxyMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 
