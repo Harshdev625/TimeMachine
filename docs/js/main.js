@@ -400,11 +400,6 @@ document.addEventListener('DOMContentLoaded', function () {
 // Add some CSS classes for enhanced animations
 const style = document.createElement('style');
 style.textContent = `
-    .navbar.scrolled {
-        background: rgba(255, 255, 255, 0.98);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
     .nav-links.active {
         display: flex;
         position: absolute;
