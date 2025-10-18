@@ -78,6 +78,8 @@
   /* btns */
   --btn-gradient-start: #4facfe;
   --btn-gradient-end: #00f2fe;
+  --navbar-height: 72px; /* new: height used by fixed navbar */
+  --navbar-padding-x: 1rem;
 }
 
 body {
@@ -92,6 +94,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
+  padding-top: var(--navbar-height); /* NEW: push content below fixed navbar */
 }
 
 body.light-theme {
@@ -191,35 +194,45 @@ body.dark-theme {
   }
 }
 
+/* Replace/override the existing .navbar layout that used 110% centered width
+   to a full-width fixed navbar that won't overflow/overlap on small screens */
 .navbar {
   position: fixed;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 110%;
+  left: 0;                /* changed: full-width anchored to viewport */
+  transform: none;        /* removed centering transform */
+  width: 100%;            /* changed: use full viewport width */
   max-width: 100%;
-  background: black;
-  color: white;
-  border-radius: 0 0 0 0;
-  padding: 15px 40px;
-  z-index: 100;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  height: var(--navbar-height);
+  padding: 10px var(--navbar-padding-x);
+  z-index: 999;           /* ensure it sits above content */
   display: flex;
   justify-content: center;
-  backdrop-filter: blur(20px);
-  background-color: var(--text-color);
+  align-items: center;
+  background-color: var(--text-color); /* preserve theme-aware coloring */
   color: var(--bg-color);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  border-radius: 0;       /* avoid rounded corners that may overlap */
+  transition: all 0.28s cubic-bezier(0.4,0,0.2,1);
+  backdrop-filter: blur(12px);
+}
 
-
+/* ensure inner container aligns well inside the smaller navbar */
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  padding: 0; /* we'll rely on .navbar padding */
 }
 
 /* Shrink and Center on Scroll */
 .navbar.scrolled {
-  width: 85%;
-  padding: 8px 30px;
-  top: 15px;
-  border-radius: 12px;
+  width: 100%;
+  padding: 6px var(--navbar-padding-x);
+  top: 0;
+  border-radius: 0;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
   color: black;
 }
@@ -229,8 +242,9 @@ body.dark-theme {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 3.5rem;
+  height: 100%;
   width: 100%;
+  padding: 0; /* we'll rely on .navbar padding */
 }
 
 /* Brand */
@@ -294,28 +308,74 @@ body.dark-theme {
   border: none;
   cursor: pointer;
   padding: 6px;
+  color: var(--bg-color); /* ensure spans (which use currentColor) contrast with navbar */
+  z-index: 1000; /* sit above the nav when opened */
 }
 
 .mobile-menu-btn span {
   width: 24px;
   height: 2px;
   background: currentColor;
-  transition: all 0.3s ease;
+  transition: transform 0.24s ease, opacity 0.2s ease, background-color 0.2s ease;
+  border-radius: 2px;
 }
 
 @media (min-width: 768px) {
   .mobile-menu-btn {
-    display: none;
+    display:none;
   }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .nav-links {
-    display: none;
+    display:none; /* keep hidden by default on mobile */
+    position: absolute;
+    top: var(--navbar-height);
+    right: 0;
+    left: 0;
+    background: rgba(0,0,0,0.92); /* solid-ish backdrop matching theme */
+    flex-direction: column;
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+    z-index: 998;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+  }
+
+  /* When opened by JS */
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    border-radius: 10px;
+    text-align: center;
+    color: var(--text-color);
+  }
+
+  /* Hamburger -> X animation */
+  .mobile-menu-btn.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .mobile-menu-btn.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* ensure the nav-toggle remains clickable and visible */
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
   }
 }
-
 
 /* Navbar on Scroll */
 @keyframes floatEffect {
@@ -1497,72 +1557,157 @@ body.dark-theme {
   transform: scale(1.1);
 }
 
-/* Responsive Design */
-@media (max-width: 640px) {
-  .hero-stats {
+/* ===== Mobile / small-screen responsive adjustments ===== */
+@media (max-width: 768px) {
+
+  /* Slightly shorter navbar on small phones */
+  :root {
+    --navbar-height: 64px;
+    --navbar-padding-x: 0.75rem;
+  }
+
+  /* Navbar adjustments for small screens */
+  .navbar {
+    padding: 8px var(--navbar-padding-x);
+    height: var(--navbar-height);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  }
+
+  .navbar.scrolled {
+    width: 100%;
+    padding: 6px var(--navbar-padding-x);
+    top: 0;
+    border-radius: 0;
+  }
+
+  /* Brand scaling */
+  .logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .brand-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-left: 8px;
+  }
+
+  /* Hide desktop nav-links on mobile (keeps menu button visible) */
+  .nav-links {
+    display: none !important;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  /* Hero: collapse two-column layout to one column and reduce paddings */
+  .hero {
+    padding: calc(var(--navbar-height) + 1.25rem) 0.9rem 2rem;
+    min-height: calc(100vh - var(--navbar-height));
+  }
+
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    align-items: stretch;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
+    line-height: 1.15;
+    margin-bottom: 0.8rem;
+    text-wrap: balance;
+  }
+
+  .gradient-text {
+    font-size: 1.85rem;
+  }
+
+  .hero-description {
+    font-size: 0.98rem;
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .hero-cta {
     flex-direction: column;
-    gap: var(--space-4);
-    margin-top: var(--space-6);
-    padding: var(--space-4);
+    gap: 0.75rem;
+    align-items: stretch;
   }
 
-  .download-info {
-    flex-direction: column;
-    gap: var(--space-3);
+  .btn-primary, .btn-secondary {
+    width: 100%;
+    justify-content: center;
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
   }
 
-  .download-features {
-    flex-direction: column;
-    align-items: center;
+  .hero-visual {
+    max-width: 420px;
+    margin: 0 auto;
+    perspective: 800px;
   }
 
-  .footer-bottom {
-    flex-direction: column;
-    gap: var(--space-4);
-    text-align: center;
-  }
-}
-
-/* Animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  to {
+  .hero-card {
+    margin-top: 0;
+    transform: none;
+    animation: none;
     opacity: 1;
-    transform: translateY(0);
+    padding: 1rem;
+  }
+
+  /* Reduce screenshots carousel height on small screens */
+  .screenshot-carousel {
+    height: 62vh;
+    min-height: 420px;
+  }
+
+  /* Reduce dot/button sizes to avoid overflow */
+  .carousel-nav {
+    width: 44px;
+    height: 44px;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .dot.active {
+    width: 28px;
+  }
+
+  /* Footer tweaks */
+  .footer {
+    padding-top: 2.5rem;
   }
 }
 
-.hero-text,
-.feature-card {
-  animation: fadeInUp 0.6s ease forwards;
+/* Very small phones (narrow width) */
+@media (max-width: 420px) {
+  .brand-text {
+    font-size: 1rem;
+  }
 
+  .hero-title {
+    font-size: 1.6rem;
+  }
+
+  .hero-description {
+    font-size: 0.95rem;
+  }
+
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .btn-primary, .btn-secondary {
+    font-size: 0.96rem;
+    padding: 0.75rem 0.9rem;
+  }
 }
-
-.feature-card:nth-child(2) {
-  animation-delay: 0.1s;
-}
-
-.feature-card:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-.feature-card:nth-child(4) {
-  animation-delay: 0.3s;
-}
-
-.feature-card:nth-child(5) {
-  animation-delay: 0.4s;
-}
-
-.feature-card:nth-child(6) {
-  animation-delay: 0.5s;
-}
-
-
 
 /* Enhanced navigation and smooth scrolling */
 html {

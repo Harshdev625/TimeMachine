@@ -30,8 +30,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const navLinks = document.querySelector('.nav-links');
 
     if (mobileMenuBtn) {
-        +        mobileMenuBtn.addEventListener('click', () => {
-            if (navLinks) navLinks.classList.toggle('active');
+    mobileMenuBtn.addEventListener('click', () => {
+            if (navLinks) navLinks.classList.toggle('open');
             mobileMenuBtn.classList.toggle('active');
         });
     }
