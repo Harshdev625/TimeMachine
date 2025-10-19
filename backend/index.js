@@ -180,7 +180,7 @@ app.listen(PORT, () => {
       console.log('Keep-alive cron disabled (no valid HEALTH_URL or RENDER_EXTERNAL_URL set).');
     } else {
       console.log(`Keep-alive cron enabled: pinging ${healthUrl} every 2 minutes`);
-      cron.schedule('*/2 * * * *', () => {
+      cron.schedule('*/10 * * * *', () => {
         try {
           const started = Date.now();
           const urlObj = new URL(healthUrl);
