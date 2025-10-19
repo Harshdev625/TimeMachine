@@ -371,7 +371,8 @@ body.light-theme .navbar.scrolled .logo {
   transition: transform 0.35s ease, box-shadow 0.35s ease;
   animation: galaxyMove 6s ease infinite;
   overflow: hidden;
-body.light-theme .navbar.scrolled .brand-text {
+}
+  body.light-theme .navbar.scrolled .brand-text {
   text-shadow: 0 2px 10px rgba(79, 172, 254, 0.2);
 }
 .nav-link {
