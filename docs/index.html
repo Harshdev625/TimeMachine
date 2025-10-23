@@ -429,7 +429,7 @@
 
     
     <!-- FAQ Section -->
-<section class="faq" id="faq">
+<section class="faq theme-scope-faq" id="faq">
   <div class="container">
     <div class="section-header">
       <h2 class="section-title">Frequently Asked Questions</h2>
@@ -446,7 +446,16 @@
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-          TimeMachine is a lightweight, open‑source Chrome extension that helps you understand and improve your digital habits. It tracks active time on sites, offers Focus Sessions and Smart Guard blocking, and generates rich reports—without collecting personal browsing data.
+          TimeMachine is an open‑source Chrome extension with a privacy‑first design to help you optimize your digital time. It provides:
+          <ul>
+            <li><strong>Automatic Time Tracking</strong> with minute‑level precision</li>
+            <li><strong>Focus Sessions</strong> (Pomodoro‑style timers with pause/resume)</li>
+            <li><strong>Smart Blocking</strong> for distracting sites and keywords</li>
+            <li><strong>Rich Analytics</strong> across daily/weekly/monthly views</li>
+            <li><strong>PDF & Email Reports</strong> with charts and insights</li>
+            <li><strong>7 UI Themes</strong> including Light and Dark</li>
+          </ul>
+          Explore the project on <a href="https://github.com/HarshDev625/TimeMachine" target="_blank" rel="noopener">GitHub</a> 
         </div>
       </div>
 
@@ -456,7 +465,7 @@
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-      TimeMachine tracks the exact time you spend on each active browser tab and organizes it by domain and category, such as Work, Social, Entertainment, or Learning. All tracking is privacy-focused: only domain names and the duration of your visits are stored, with no full URLs, page content, or personal data collected. This allows you to get clear insights into your browsing habits while keeping your information completely private.
+          TimeMachine tracks active tab time with minute‑level precision. Sessions start when a tab becomes active and pause on idle/lock. Data is organized by <em>domain</em> and <em>category</em> (e.g., Work, Social, Entertainment, Professional, Other). Only domain + duration are stored—no full URLs or page content.
         </div>
       </div>
 
@@ -474,7 +483,7 @@ Focus Sessions are structured, Pomodoro‑style timers designed to help you stay
     <span class="faq-icon">+</span>
   </button>
   <div class="faq-answer">
-    Automatic Time Tracking continuously monitors the time you spend on each active browser tab with minute-level accuracy. It intelligently detects when you switch tabs, become idle, or step away from your computer, and automatically pauses tracking to ensure your reports reflect only real, productive time. This helps you understand exactly where your time goes and identify areas for better focus and efficiency.
+    Automatic Time Tracking records real, active time only: it detects tab switches, idle state, and lock screen events. It buffers locally and syncs periodically to keep data resilient offline. Analytics aggregate into daily/weekly/monthly dashboards with top sites, category distribution, and productivity score.
   </div>
 </div>
 <div class="faq-item">
@@ -482,9 +491,9 @@ Focus Sessions are structured, Pomodoro‑style timers designed to help you stay
     What is Smart Blocking?
     <span class="faq-icon">+</span>
   </button>
-  <div class="faq-answer">
-   Smart Blocking helps you stay focused by automatically preventing access to distracting websites or content containing specific keywords. You can fully customize your blocklist to include sites or topics that usually break your concentration. Smart Blocking can be enabled manually whenever you need it, or set to activate automatically during Focus Sessions, ensuring uninterrupted work periods and improved productivity.
-  </div>
+        <div class="faq-answer">
+          Smart Blocking lets you block distracting domains and optionally filter keywords on‑page. You can quick‑block the current site, customize your blocklist, and auto‑enable blocking during Focus Sessions for uninterrupted work.
+        </div>
 </div>
 
       <div class="faq-item">
@@ -493,7 +502,14 @@ Focus Sessions are structured, Pomodoro‑style timers designed to help you stay
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-          Yes. Privacy is built‑in: TimeMachine stores only domain names and session durations. It does not collect full URLs, page content, or personal data. You remain in control.
+          Yes. Privacy is core to TimeMachine:
+          <ul>
+            <li><strong>Minimal data</strong>: only domain + duration</li>
+            <li><strong>No full URLs</strong>, no page content</li>
+            <li><strong>Local‑first</strong> buffering with retry</li>
+            <li><strong>User control</strong>: delete data anytime</li>
+          </ul>
+          Read more in our <a href="privacy.html">Privacy Policy</a>.
         </div>
       </div>
 
@@ -503,7 +519,7 @@ Focus Sessions are structured, Pomodoro‑style timers designed to help you stay
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-          Absolutely. Generate PDF or HTML reports with charts, productivity scores, top sites, time distribution by category, and session breakdowns for clear insights.
+          Yes. Generate <strong>PDF reports</strong> with key insights, ranked domains with session stats, category charts, and time‑based visuals. You can also schedule <strong>HTML email reports</strong> via EmailJS (daily/weekly/monthly).
         </div>
       </div>
 
@@ -513,7 +529,7 @@ Focus Sessions are structured, Pomodoro‑style timers designed to help you stay
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-          Yes. Choose from 7 built‑in UI themes—Light, Dark, Cyberpunk, Minimal, Ocean, Sunset, and Forest—to match your style.
+          Yes. Choose from <strong>7 built‑in themes</strong>—Light, Dark, Cyberpunk, Minimal, Ocean, Sunset, and Forest. Theme‑aware components ensure consistent visuals across analytics, focus, and guard features.
         </div>
       </div>
 
@@ -523,7 +539,7 @@ Focus Sessions are structured, Pomodoro‑style timers designed to help you stay
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-          Yes. TimeMachine is 100% open‑source under the MIT license. Explore the code, open issues, or contribute on GitHub.
+          Yes. TimeMachine is <strong>open‑source (MIT)</strong>. Explore the codebase, open issues, or contribute via PRs on <a href="https://github.com/HarshDev625/TimeMachine" target="_blank" rel="noopener">GitHub</a>. See <a href="CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a> and <a href="CHANGELOG.md" target="_blank" rel="noopener">Changelog</a> for more.
         </div>
       </div>
 
@@ -533,15 +549,95 @@ Focus Sessions are structured, Pomodoro‑style timers designed to help you stay
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-          Install from the Chrome Web Store. TimeMachine starts tracking automatically with sensible defaults—no signup or complex setup required.
+          Install from the <a href="https://chromewebstore.google.com/detail/timemachine/hjkicompionnablkpkgnplnacnnchjij" target="_blank" rel="noopener">Chrome Web Store</a> (recommended). After install:
+          <ol>
+            <li>Open the extension popup, sign up (email/password)</li>
+            <li>Browse normally—tracking happens automatically</li>
+            <li>Check Analytics, Focus, Guard, and Summary tabs for insights</li>
+          </ol>
+          Devs can run the backend and load the unpacked extension; see the README for setup details.
         </div>
       </div>
+
+      <!-- New: Tech & APIs Used -->
+      <div class="faq-item">
+        <button class="faq-question">
+          What technologies and Chrome APIs does TimeMachine use?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          TimeMachine is a Chrome extension built on standard web tech and Chrome APIs:
+          <ul>
+            <li><strong>Chrome APIs</strong>: tabs (active tab), idle (user activity), alarms (periodic tasks), storage (sync/local), runtime (events), and <em>declarativeNetRequest</em> for distraction blocking.</li>
+            <li><strong>Reporting</strong>: Client‑side generation of rich PDF/HTML reports with charts and insights.</li>
+            <li><strong>Email</strong>: Optional scheduled email reports via EmailJS.</li>
+            <li><strong>Landing Page</strong>: Uses Lottie and GSAP for lightweight animations.</li>
+          </ul>
+          The project is open‑source under MIT—browse the code and implementation details on <a href="https://github.com/HarshDev625/TimeMachine" target="_blank" rel="noopener">GitHub</a>.
+        </div>
+      </div>
+
+      <!-- New: Offline Support -->
+      <div class="faq-item">
+        <button class="faq-question">
+          Does TimeMachine work offline?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Yes. Tracking is <strong>local‑first</strong>. Active time is buffered locally and synced when online. Reports (PDF/HTML) generate on your device, so you can review insights even without connectivity. When the network returns, pending data is retried.
+        </div>
+      </div>
+
+      <!-- New: Report Issues/Requests -->
+      <div class="faq-item">
+        <button class="faq-question">
+          How can I report a bug or request a feature?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          Open an issue on <a href="https://github.com/HarshDev625/TimeMachine/issues" target="_blank" rel="noopener">GitHub Issues</a>. Include steps to reproduce, screenshots (if any), and your extension version (see the Download section). Contributions via pull requests are welcome.
+        </div>
+      </div>
+      <div class="faq-item">
+  <button class="faq-question">
+    What is the TimeMachine Chrome Extension?
+    <span class="faq-icon">+</span>
+  </button>
+  <div class="faq-answer">
+    The <strong>TimeMachine Chrome Extension</strong> is a productivity tool designed to help users track their browsing habits, visualize time spent across different websites, and generate insightful reports. It features interactive charts, customizable themes, and offline functionality — all powered by <strong>Chrome Extension Manifest V3</strong>.
+  </div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-question">
+    How does the TimeMachine extension work?
+    <span class="faq-icon">+</span>
+  </button>
+  <div class="faq-answer">
+    The extension runs directly in your browser using background service workers to collect and process activity data securely. It then syncs with the backend (<strong>Node.js + MongoDB</strong>) via APIs to generate charts, analytics, and PDF reports. All user data remains private and is encrypted during transmission.
+  </div>
+</div>
+
+<div class="faq-item">
+  <button class="faq-question">
+    Where can I install or access the TimeMachine extension?
+    <span class="faq-icon">+</span>
+  </button>
+  <div class="faq-answer">
+    You can install the TimeMachine extension from the 
+    <a href="https://chromewebstore.google.com/detail/timemachine/hjkicompionnablkpkgnplnacnnchjij" target="_blank" rel="noopener">Chrome Web Store</a>.
+    <br>
+    For a visual walkthrough, demos, and screenshots, visit the 
+    <a href="https://harshdev625.github.io/TimeMachine/" target="_blank" rel="noopener">official landing page</a>.
+  </div>
+</div>
+
+
     </div>
   </div>
 </section>
-
     <!-- Download Section -->
-    <section class="download" id="download">
+<section class="download" id="download">
         <div class="container">
             <div class="download-content">
                 <h2 class="download-title">Ready to Boost Your Productivity?</h2>

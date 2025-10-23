@@ -102,6 +102,37 @@ body.dark-theme {
   --card-bg-color: #222121;
 }
 
+/* Global link styles */
+a {
+  color: #14b8a6;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+a:hover,
+a:focus {
+  color: #0d9488;
+}
+
+a:active {
+  color: #0f766e;
+}
+
+/* Keep visited consistent with brand teal for readability */
+a:visited {
+  color: #14b8a6;
+}
+
+/* Light theme slight adjustment for contrast */
+body.light-theme a {
+  color: #0f766e;
+}
+
+body.light-theme a:hover,
+body.light-theme a:focus {
+  color: #0d9488;
+}
+
 #theme-toggle-button {
   font-size: 7px;
   position: relative;
@@ -292,6 +323,33 @@ body.light-theme .navbar.scrolled {
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2),
     0 0 40px rgba(79, 172, 254, 0.1) !important;
   color: black !important;
+}
+
+/* FAQ light theme overrides */
+body.light-theme .theme-scope-faq .faq-question {
+  color: var(--gray-700);
+}
+
+body.light-theme .theme-scope-faq .faq-answer {
+  color: var(--gray-600);
+}
+
+body.light-theme .theme-scope-faq .faq-question:hover {
+  background: transparent;
+}
+
+body.light-theme .theme-scope-faq .faq-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 8px;
+  background: rgba(20, 184, 166, 0.6); /* teal at 60% */
+  color: #ffffff;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .navbar .container {
@@ -1797,7 +1855,7 @@ section {
   font-weight: 700;
   cursor: pointer;
   text-align: left;
-  padding: 0.25rem 0;
+  padding: 0.5rem 0;
   transition: color 0.25s ease;
 }
 
