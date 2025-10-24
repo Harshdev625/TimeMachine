@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const navLinks = document.querySelector('.nav-links');
 
     if (mobileMenuBtn) {
-        +        mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuBtn.addEventListener('click', () => {
             if (navLinks) navLinks.classList.toggle('active');
             mobileMenuBtn.classList.toggle('active');
         });
@@ -110,12 +110,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const navbar = document.querySelector('.navbar');
 
     function updateNavbar() {
+        if (!navbar) return;
         if (window.scrollY > 50) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
         }
     }
+
+    // ensure correct initial state
+    updateNavbar();
 
     window.addEventListener('scroll', updateNavbar);
 
@@ -172,7 +176,9 @@ document.addEventListener('DOMContentLoaded', function () {
         prevBtn: document.querySelector('.carousel-nav.prev'),
         nextBtn: document.querySelector('.carousel-nav.next'),
         currentSlide: 0,
-        totalSlides: 5,
+        totalSlides: 0,
+        totalItems: 0,           // totalSlides + cloned items
+        slideWidthPercent: 0,    // computed percent width per slide
         isAnimating: false,
         autoplayInterval: null,
         autoplayDelay: 5000,
@@ -180,40 +186,66 @@ document.addEventListener('DOMContentLoaded', function () {
         init() {
             if (!this.container) return;
 
+            // compute real total slides from initial DOM
+            this.totalSlides = this.slides.length || 0;
+            if (this.totalSlides === 0) return;
             this.setupInfiniteLoop();
             this.bindEvents();
             this.updateCarousel();
             this.startAutoplay();
+
+            // Recompute sizes on resize/orientation change to avoid cropping (zoom, ctrl+)
+            const recomputeHandler = this.recomputeWidths.bind(this);
+            window.addEventListener('resize', recomputeHandler);
+            window.addEventListener('orientationchange', recomputeHandler);
+            // call once to ensure correct sizing
+            this.recomputeWidths();
         },
 
         setupInfiniteLoop() {
             // Clone first and last slides for seamless infinite loop
-            const firstSlide = this.slides[0].cloneNode(true);
-            const lastSlide = this.slides[this.totalSlides - 1].cloneNode(true);
+            const firstSlideClone = this.slides[0].cloneNode(true);
+            const lastSlideClone = this.slides[this.totalSlides - 1].cloneNode(true);
 
-            // Add cloned slides
-            this.container.appendChild(firstSlide); // Add first slide to end
-            this.container.insertBefore(lastSlide, this.slides[0]); // Add last slide to beginning
+            // Add cloned slides (last clone before first, first clone after last)
+            this.container.insertBefore(lastSlideClone, this.container.firstChild);
+            this.container.appendChild(firstSlideClone);
 
-            // Update container width for new slides (7 slides now: clone, 1, 2, 3, 4, 5, clone)
-            this.container.style.width = '700%'; // 7 slides
-
-            // Update slide width
-            const allSlides = this.container.querySelectorAll('.carousel-slide');
-            allSlides.forEach(slide => {
-                slide.style.width = '14.2857%'; // 100% / 7 slides
-            });
-
-            // Start at the real first slide (index 1, since we added a clone at index 0)
+            // Use centralized recompute to set widths and start position
+            this.recomputeWidths();
             this.currentSlide = 1;
-            this.container.style.transform = `translateX(-${this.currentSlide * 14.2857}%)`;
-            this.container.style.transition = 'none'; // No transition for initial positioning
+            // position without transition
+            this.container.style.transition = 'none';
+            this.container.style.transform = `translateX(-${this.currentSlide * this.slideWidthPercent}%)`;
+        },
+
+        // Recalculate slide/container widths and re-position carousel (safe to call on resize/zoom)
+        recomputeWidths() {
+            if (!this.container) return;
+            const allSlides = this.container.querySelectorAll('.carousel-slide');
+            this.totalItems = allSlides.length || 0;
+            if (this.totalItems === 0) return;
+            // container width is number of items * 100%
+            this.container.style.width = (this.totalItems * 100) + '%';
+            this.slideWidthPercent = 100 / this.totalItems;
+            allSlides.forEach(slide => {
+                slide.style.width = this.slideWidthPercent + '%';
+            });
+            // Reposition to currentSlide using the updated percent
+            // Use no-transition to avoid visible jump on resize
+            const prevTransition = this.container.style.transition;
+            this.container.style.transition = 'none';
+            this.container.style.transform = `translateX(-${this.currentSlide * this.slideWidthPercent}%)`;
+            // Force reflow then restore transition setting
+            // eslint-disable-next-line no-unused-expressions
+            this.container.offsetHeight;
+            this.container.style.transition = prevTransition || 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
         },
 
         bindEvents() {
             // Navigation buttons
-            this.prevBtn?.addEventListener('click', () => this.prevSlide());
-            this.nextBtn?.addEventListener('click', () => this.nextSlide());
+            if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prevSlide());
+            if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.nextSlide());
 
             // Dots navigation
             this.dots.forEach((dot, index) => {
@@ -239,7 +271,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.isAnimating || !this.container) return;
 
             this.isAnimating = true;
-            const slideWidth = 14.2857; // 100% / 7 slides
+            // use precomputed slideWidthPercent (kept up-to-date by recomputeWidths)
+            if (!this.slideWidthPercent) {
+                this.recomputeWidths();
+            }
+            const slideWidth = this.slideWidthPercent;
             const translateX = -this.currentSlide * slideWidth;
 
             // Apply or skip transition
@@ -262,12 +298,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 setTimeout(() => {
                     // If we're at a cloned slide, jump to the real slide
                     if (this.currentSlide === 0) {
-                        // At cloned last slide, jump to real last slide
+                        // At cloned last slide, jump to real last slide (index = totalSlides)
                         this.currentSlide = this.totalSlides;
+                        // ensure widths still correct then jump
+                        this.recomputeWidths();
                         this.updateCarousel(true);
                     } else if (this.currentSlide === this.totalSlides + 1) {
                         // At cloned first slide, jump to real first slide
                         this.currentSlide = 1;
+                        this.recomputeWidths();
                         this.updateCarousel(true);
                     }
                     this.isAnimating = false;
@@ -279,10 +318,10 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
         getRealSlideIndex() {
-            // Convert carousel index to real slide index (0-4)
-            if (this.currentSlide === 0) return this.totalSlides - 1; // Cloned last slide
-            if (this.currentSlide === this.totalSlides + 1) return 0; // Cloned first slide
-            return this.currentSlide - 1; // Real slides (1-5 become 0-4)
+            // Convert carousel index to real slide index (0..totalSlides-1)
+            if (this.currentSlide === 0) return this.totalSlides - 1; // cloned last
+            if (this.currentSlide === this.totalSlides + 1) return 0; // cloned first
+            return this.currentSlide - 1;
         },
 
         nextSlide() {
@@ -356,39 +395,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // --- Scroll to Top Button Logic ---
         // Show the button if user has scrolled down more than 300px
-        if (scrollPosition > 300) {
-            scrollTopBtn.classList.add('visible');
-        } else {
-            scrollTopBtn.classList.remove('visible');
+        if (scrollTopBtn) {
+            if (scrollPosition > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
         }
 
         // --- Scroll to Bottom Button Logic ---
-        // Show the button if user is near the top, but hide it when they get close to the bottom
         const isNearBottom = scrollPosition + clientHeight >= scrollHeight - 300;
-        if (scrollPosition > 100 && !isNearBottom) {
-            scrollBottomBtn.classList.add('visible');
-        } else {
-            scrollBottomBtn.classList.remove('visible');
+        if (scrollBottomBtn) {
+            if (scrollPosition > 100 && !isNearBottom) {
+                scrollBottomBtn.classList.add('visible');
+            } else {
+                scrollBottomBtn.classList.remove('visible');
+            }
         }
     };
 
     // --- Click Event Listeners ---
-
-    // Smoothly scroll to the top of the page
-    scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+    if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
-    });
+    }
 
-    // Smoothly scroll to the bottom of the page
-    scrollBottomBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: 'smooth'
+    if (scrollBottomBtn) {
+        scrollBottomBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
         });
-    });
+    }
 
     // Add a scroll event listener to the window to check button visibility
     window.addEventListener('scroll', handleScrollButtons);
@@ -406,7 +449,8 @@ style.textContent = `
         top: 100%;
         left: 0;
         right: 0;
-        background: white;
+        background: var(--bg-color);
+        color: var(--text-color);
         flex-direction: column;
         padding: 1rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -419,6 +463,7 @@ style.textContent = `
             padding: 0;
             box-shadow: none;
             background: transparent;
+            color: inherit;
         }
     }
 
