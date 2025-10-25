@@ -178,7 +178,7 @@ body.dark-theme {
   padding: 0 var(--space-4);
 }
 
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   .container {
     padding: 0 var(--space-6);
   }
@@ -316,25 +316,14 @@ body.light-theme .navbar.scrolled {
 .logo {
   width: 50px;
   height: 50px;
-  border-radius: 12px;
-  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              filter 0.5s ease-in-out;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
-  object-fit: cover;
 }
 
 .navbar.scrolled .logo {
   width: 42px;
   height: 42px;
-  border-radius: 10px;
-  filter: drop-shadow(0 0 16px rgba(96, 165, 250, 0.6))
-          drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  
 }
 
-body.light-theme .navbar.scrolled .logo {
-  filter: drop-shadow(0 0 8px rgba(79, 172, 254, 0.4))
-          drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
-}
 
 .brand-text {
   font-family: 'Poppins', sans-serif;
@@ -1110,7 +1099,7 @@ body.light-theme .navbar.scrolled .nav-link:hover {
 }
 
 /* Tablet-specific adjustments (769px - 1024px) - Keep full navbar visible */
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1024px) {
   .navbar {
     padding: 12px 24px;
   }
