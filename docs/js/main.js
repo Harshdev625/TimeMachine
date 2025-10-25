@@ -26,15 +26,58 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const navLinks = document.querySelector('.nav-links');
 
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', () => {
-            if (navLinks) navLinks.classList.toggle('active');
-            mobileMenuBtn.classList.toggle('active');
+if (mobileMenuBtn && navLinks) {
+  
+    mobileMenuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        this.classList.toggle('active');
+        navLinks.classList.toggle('active');
+        
+     
+        if (navLinks.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    });
+   
+    const navItems = navLinks.querySelectorAll('.nav-link');
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            mobileMenuBtn.classList.remove('active');
+            navLinks.classList.remove('active');
+            document.body.style.overflow = '';
         });
-    }
+    });
+    
+   
+    document.addEventListener('click', function(e) {
+        if (!mobileMenuBtn.contains(e.target) && 
+            !navLinks.contains(e.target) && 
+            navLinks.classList.contains('active')) {
+            mobileMenuBtn.classList.remove('active');
+            navLinks.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+    
+  
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            if (window.innerWidth >= 768) {
+                mobileMenuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }, 250);
+    });
+}
 
     const heroCard = document.querySelector('.hero-card');
     const cardGlow = heroCard?.querySelector('.card-glow');
@@ -439,64 +482,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initial check when the page loads
     handleScrollButtons();
 });
-
-// Add some CSS classes for enhanced animations
-const style = document.createElement('style');
-style.textContent = `
-    .nav-links.active {
-        display: flex;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: var(--bg-color);
-        color: var(--text-color);
-        flex-direction: column;
-        padding: 1rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    @media (min-width: 768px) {
-        .nav-links.active {
-            position: static;
-            flex-direction: row;
-            padding: 0;
-            box-shadow: none;
-            background: transparent;
-            color: inherit;
-        }
-    }
-
-    .mobile-menu-btn.active span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .mobile-menu-btn.active span:nth-child(2) {
-        opacity: 0;
-    }
-
-    .mobile-menu-btn.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -6px);
-    }
-
-    .animate-in {
-        animation: fadeInUp 0.6s ease forwards;
-    }
-
-    img {
-        opacity: 1;
-        transition: opacity 0.3s ease;
-    }
-
-    /* Smooth transitions for better UX */
-    .hero-card,
-    .feature-card,
-    .screenshot-item {
-        will-change: transform;
-    }
-`;
-
-document.head.appendChild(style);
 
 // Register GSAP Plugin
 if (window.gsap && window.Physics2DPlugin) {
