@@ -31,9 +31,25 @@
     <!-- Add GSAP + Physics2D -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Physics2DPlugin.min.js"></script>
+
+    
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+      </div>
+
+      <script>
+            
+        window.addEventListener('scroll', function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progress-bar').style.width = scrolled + '%';
+        });
+        </script>
 </head>
 
 <body>
+    
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
@@ -556,5 +572,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js"></script>
     <!-- Scripts -->
     <script defer src="js/main.js"></script>
+    <style>
+    #progress-container {
+    position: fixed ;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    z-index: 99990;
+    /* background: #f3f3f3; */
+    }
+
+   #progress-bar {
+    height: 53%;
+    width: 0;
+    background: linear-gradient(90deg, rgb(0, 72, 255) 0%, rgb(153, 187, 255) 50%, rgb(0, 184, 250) 100%);
+    box-shadow: 0 0 4px rgba(0, 166, 255, 0.7), 0 0 10px rgba(255, 255, 255, 0.7);
+    transition: width 0.09s ease-in-out;
+    border-radius: 10px;
+   }
+    </style>
 </body>
 </html>
