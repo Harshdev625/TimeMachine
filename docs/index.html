@@ -31,9 +31,25 @@
     <!-- Add GSAP + Physics2D -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Physics2DPlugin.min.js"></script>
+
+    
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+      </div>
+
+      <script>
+            
+        window.addEventListener('scroll', function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progress-bar').style.width = scrolled + '%';
+        });
+        </script>
 </head>
 
 <body>
+    
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
