@@ -25,6 +25,102 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("theme", "light");
       }
     });
+
+    const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+    const navLinks = document.querySelector(".nav-links");
+
+    if (mobileMenuBtn && navLinks) {
+      mobileMenuBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+
+        this.classList.toggle("active");
+        navLinks.classList.toggle("active");
+
+        if (navLinks.classList.contains("active")) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
+        }
+      });
+
+      const navItems = navLinks.querySelectorAll(".nav-link");
+      navItems.forEach((item) => {
+        item.addEventListener("click", function () {
+          mobileMenuBtn.classList.remove("active");
+          navLinks.classList.remove("active");
+          document.body.style.overflow = "";
+        });
+      });
+
+      document.addEventListener("click", function (e) {
+        if (
+          !mobileMenuBtn.contains(e.target) &&
+          !navLinks.contains(e.target) &&
+          navLinks.classList.contains("active")
+        ) {
+          mobileMenuBtn.classList.remove("active");
+          navLinks.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+      });
+
+      let resizeTimer;
+      window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          if (window.innerWidth >= 768) {
+            mobileMenuBtn.classList.remove("active");
+            navLinks.classList.remove("active");
+            document.body.style.overflow = "";
+          }
+        }, 250);
+      });
+    }
+
+    const heroCard = document.querySelector(".hero-card");
+    const cardGlow = heroCard?.querySelector(".card-glow");
+
+    if (heroCard && cardGlow) {
+      heroCard.addEventListener("mousemove", (e) => {
+        const rect = heroCard.getBoundingClientRect();
+        const cardCenterX = rect.left + rect.width / 2;
+        const cardCenterY = rect.top + rect.height / 2;
+        const deltaX = e.clientX - cardCenterX;
+        const deltaY = e.clientY - cardCenterY;
+
+        const moveX = -deltaX * 0.6;
+        const moveY = -deltaY * 0.6;
+
+        const glowX = deltaX * 0.03;
+        const glowY = deltaY * 0.03;
+
+        heroCard.style.transform = `translateX(calc(-80px + ${moveX}px)) translateY(${moveY}px) scale(0.97) rotateY(-8deg)`;
+        cardGlow.style.transform = `translate(calc(-50% + ${glowX}px), calc(-50% + ${glowY}px))`;
+      });
+
+      heroCard.addEventListener("mouseleave", () => {
+        heroCard.style.transform =
+          "translateX(0px) translateY(0px) scale(1) rotateY(0deg)";
+        cardGlow.style.transform = "translate(-50%, -50%)";
+      });
+    }
+
+    const navLinksElements = document.querySelectorAll('.nav-link[href^="#"]');
+    navLinksElements.forEach((link) => {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute("href");
+        const targetSection = document.querySelector(targetId);
+
+        if (targetSection) {
+          const offsetTop = targetSection.offsetTop - 80;
+          window.scrollTo({
+            top: offsetTop,
+            behavior: "smooth",
+          });
+        }
+      });
+    });
   }
 
   const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
