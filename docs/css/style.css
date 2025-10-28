@@ -1766,7 +1766,8 @@ body.light-theme .navbar.scrolled .nav-link:hover {
 
 .download-info .info-label {
   font-weight: 700;
-  color: rgba(255,255,255,0.75);
+  color: var(--text-color);
+  opacity: 0.75;
   font-size: 0.95rem;
   margin-bottom: 0.35rem;
 }
@@ -1774,7 +1775,7 @@ body.light-theme .navbar.scrolled .nav-link:hover {
 .download-info .info-value,
 .download-info .info-value-1 {
   font-size: 1rem;
-  color: #fff;
+  color: var(--text-color);
   font-weight: 900;
 }
 
@@ -1792,7 +1793,7 @@ body.light-theme .navbar.scrolled .nav-link:hover {
   display: flex;
   align-items: center;
   gap: 0.9rem;
-  color: rgba(255,255,255,0.95);
+  color: var(--text-color);
   font-weight: 600;
   font-size: 1rem;
 }
@@ -2121,21 +2122,3 @@ body.light-theme .navbar.scrolled .nav-link:hover {
   .carousel-nav { width: 40px; height: 40px; }
   .dot, .dot.active { width: 10px; height: 10px; }
 }
-
-
-
-
-/* Light theme fixes for Download section white text */
-body.light-theme .download { color: var(--gray-900) !important; }
-body.light-theme .download .download-info .info-label { color: var(--gray-600) !important; }
-body.light-theme .download .download-info .info-value,
-body.light-theme .download .download-info .info-value-1 { color: var(--gray-900) !important; }
-body.light-theme .download .download-info .info-item span { color: var(--gray-900) !important; }
-body.light-theme .download .download-info .info-item { color: var(--gray-900) !important; }
-body.light-theme .download .feature-check { color: var(--gray-800) !important; }
-body.light-theme .download .feature-check span { color: var(--gray-800) !important; }
-/* Stronger, id-scoped overrides to bust any residual white text */
-body.light-theme #download .download-info span { color: var(--gray-900) !important; }
-body.light-theme #download .download-info .info-label { color: var(--gray-700) !important; }
-body.light-theme #download .feature-check, 
-body.light-theme #download .feature-check span { color: var(--gray-800) !important; }
