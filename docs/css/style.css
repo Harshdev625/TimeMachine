@@ -2124,3 +2124,18 @@ body.light-theme .navbar.scrolled .nav-link:hover {
 
 
 
+
+/* Light theme fixes for Download section white text */
+body.light-theme .download { color: var(--gray-900) !important; }
+body.light-theme .download .download-info .info-label { color: var(--gray-600) !important; }
+body.light-theme .download .download-info .info-value,
+body.light-theme .download .download-info .info-value-1 { color: var(--gray-900) !important; }
+body.light-theme .download .download-info .info-item span { color: var(--gray-900) !important; }
+body.light-theme .download .download-info .info-item { color: var(--gray-900) !important; }
+body.light-theme .download .feature-check { color: var(--gray-800) !important; }
+body.light-theme .download .feature-check span { color: var(--gray-800) !important; }
+/* Stronger, id-scoped overrides to bust any residual white text */
+body.light-theme #download .download-info span { color: var(--gray-900) !important; }
+body.light-theme #download .download-info .info-label { color: var(--gray-700) !important; }
+body.light-theme #download .feature-check, 
+body.light-theme #download .feature-check span { color: var(--gray-800) !important; }
