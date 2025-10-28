@@ -1788,7 +1788,10 @@ body.light-theme .navbar.scrolled .nav-link:hover {
 
 .download-info .info-label {
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.75);
+
+  color: var(--text-color);
+  opacity: 0.75;
+
   font-size: 0.95rem;
   margin-bottom: 0.35rem;
 }
@@ -1796,7 +1799,7 @@ body.light-theme .navbar.scrolled .nav-link:hover {
 .download-info .info-value,
 .download-info .info-value-1 {
   font-size: 1rem;
-  color: #fff;
+  color: var(--text-color);
   font-weight: 900;
 }
 
@@ -1815,6 +1818,7 @@ body.light-theme .navbar.scrolled .nav-link:hover {
   align-items: center;
   gap: 0.9rem;
   color: rgba(255, 255, 255, 0.95);
+  color: var(--text-color);
   font-weight: 600;
   font-size: 1rem;
 }
