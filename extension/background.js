@@ -32,17 +32,6 @@ async function resolveBackendUrl() {
   } catch (e) {
     console.warn("resolveBackendUrl failed:", e);
   }
-  const renderBase = 'https://timemachine-1.onrender.com';
-  try {
-    const controller = new AbortController();
-    const t = setTimeout(() => controller.abort(), 2000);
-    const res = await fetch(`${renderBase}/health`, { method: 'GET', cache: 'no-store', signal: controller.signal });
-    clearTimeout(t);
-    if (res.ok) {
-      await chrome.storage.local.set({ tmBackendUrl: (_backendCache = renderBase) });
-      return _backendCache;
-    }
-  } catch (_) {}
   const probes = ['http://127.0.0.1:3000', 'http://localhost:3000'];
   for (const base of probes) {
     try {
@@ -57,7 +46,7 @@ async function resolveBackendUrl() {
       }
     } catch (_) {}
   }
-  return (_backendCache = renderBase);
+  return (_backendCache = 'http://localhost:3000');
 }
 
 async function backendFetch(path, options = {}) {
@@ -185,7 +174,6 @@ function notify(id, title, message) {
   } catch (e) {
     console.warn('focusTimerCheck alarm setup failed:', e);
   }
-  // Run an immediate check on startup to finalize any expired sessions and notify promptly
   try { focusTimerCheckTick(); } catch (_) {}
 })();
 

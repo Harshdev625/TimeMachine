@@ -23,7 +23,6 @@
     ]
   },
   "host_permissions": [
-    "https://timemachine-1.onrender.com/*",
     "https://api.emailjs.com/*",
     "https://quickchart.io/*",
     "https://accounts.google.com/*",
@@ -59,7 +58,7 @@
     }
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://timemachine-1.onrender.com https://api.emailjs.com https://quickchart.io https://www.googleapis.com https://people.googleapis.com https://accounts.google.com"
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.emailjs.com https://quickchart.io https://www.googleapis.com https://people.googleapis.com https://accounts.google.com"
   },
   "web_accessible_resources": [
     {

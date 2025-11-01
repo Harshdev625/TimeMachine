@@ -21,17 +21,6 @@ export async function resolveBackendUrl() {
     }
   } catch (e) {}
 
-  const renderBase = 'https://timemachine-1.onrender.com';
-  try {
-    const controller = new AbortController();
-    const t = setTimeout(() => controller.abort(), 2000);
-    const res = await fetch(renderBase + '/health', { method: 'GET', cache: 'no-store', signal: controller.signal });
-    clearTimeout(t);
-    if (res.ok) {
-      try { await chrome.storage?.local.set({ tmBackendUrl: renderBase }); } catch (_) {}
-      return renderBase;
-    }
-  } catch (_) {}
 
   const probes = ['http://127.0.0.1:3000', 'http://localhost:3000'];
   for (const base of probes) {
@@ -46,8 +35,7 @@ export async function resolveBackendUrl() {
       }
     } catch (_) {}
   }
-
-  return renderBase;
+  return 'http://localhost:3000';
 }
 
 export async function apiCall(endpoint, options = {}) {

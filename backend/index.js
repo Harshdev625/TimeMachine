@@ -20,11 +20,11 @@ app.use(express.json({ limit: '2mb' }));
 app.use(cors({
   origin: function (origin, callback) {
     const allowedOrigins = [
-      'https://timemachine-1.onrender.com',
+      process.env.BACKEND_URL,
       'http://localhost:8080',
       'http://localhost:3000',
       ...(process.env.NODE_ENV === 'development' ? ['chrome-extension://*'] : ['chrome-extension://your-extension-id'])
-    ];
+    ].filter(Boolean);
     if (!origin || allowedOrigins.some(allowed => 
       allowed === origin || (allowed.includes('chrome-extension://') && origin.startsWith('chrome-extension://'))
     )) {
@@ -179,8 +179,8 @@ app.listen(PORT, () => {
     if (!healthUrl) {
       console.log('Keep-alive cron disabled (no valid HEALTH_URL or RENDER_EXTERNAL_URL set).');
     } else {
-      console.log(`Keep-alive cron enabled: pinging ${healthUrl} every 2 minutes`);
-      cron.schedule('*/10 * * * *', () => {
+      console.log(`Keep-alive cron enabled: pinging ${healthUrl} every hour`);
+      cron.schedule('0 * * * *', () => {
         try {
           const started = Date.now();
           const urlObj = new URL(healthUrl);

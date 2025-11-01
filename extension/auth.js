@@ -166,16 +166,6 @@ const resolveBackendUrl = async () => {
       } catch {}
     }
   } catch {}
-  const renderBase = 'https://timemachine-1.onrender.com';
-  try {
-    const controller = new AbortController();
-    setTimeout(() => controller.abort(), 2000);
-    const res = await fetch(`${renderBase}/health`, { method: 'GET', cache: 'no-store', signal: controller.signal });
-    if (res.ok) {
-      try { await chrome.storage.local.set({ tmBackendUrl: renderBase }); } catch {}
-      return renderBase;
-    }
-  } catch {}
   for (const base of ['http://127.0.0.1:3000', 'http://localhost:3000']) {
     try {
       const controller = new AbortController();
@@ -187,7 +177,7 @@ const resolveBackendUrl = async () => {
       }
     } catch {}
   }
-  return renderBase;
+  return 'http://localhost:3000';
 };
 
 window.Auth = { authenticateUser, login, signup, logout, isAuthenticated };
