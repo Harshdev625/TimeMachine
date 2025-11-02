@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TimeMachine",
-  "version": "1.6.1",
+  "version": "1.6.3",
   "homepage_url": "https://harshdev625.github.io/TimeMachine/",
   "description": "Track your browsing habits and boost productivity with insightful stats.",
   "permissions": [
@@ -23,6 +23,7 @@
     ]
   },
   "host_permissions": [
+    "__PRODUCTION_BACKEND_URL__/*",
     "https://api.emailjs.com/*",
     "https://quickchart.io/*",
     "https://accounts.google.com/*",
@@ -58,7 +59,7 @@
     }
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.emailjs.com https://quickchart.io https://www.googleapis.com https://people.googleapis.com https://accounts.google.com"
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' __PRODUCTION_BACKEND_URL__ https://api.emailjs.com https://quickchart.io https://www.googleapis.com https://people.googleapis.com https://accounts.google.com"
   },
   "web_accessible_resources": [
     {

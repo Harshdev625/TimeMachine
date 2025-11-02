@@ -7,46 +7,12 @@ let pomodoroState = { running: false, mode: "work", endsAt: null };
 let pomodoroInterval = null;
 let blockedSites = new Map();
 let blockedKeywords = new Map();
-let _backendCache = null;
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  if (msg.action === 'triggerImmediateSync' || msg.action === 'authSuccess') {
-    sendResponse({ ok: true }); // prevents the runtime.lastError warning
-  }
-  return true;
-});
+const PRODUCTION_BACKEND = '__PRODUCTION_BACKEND_URL__';
 
 async function resolveBackendUrl() {
-  if (_backendCache) return _backendCache;
-  try {
-    const { TMConfigOverrides, tmBackendUrl } = await chrome.storage.local.get(["TMConfigOverrides", "tmBackendUrl"]);
-    const candidate = tmBackendUrl || TMConfigOverrides?.backendBaseUrl;
-    if (candidate && typeof candidate === "string") {
-      const url = candidate.replace(/\/$/, "");
-      const controller = new AbortController();
-      const t = setTimeout(() => controller.abort(), 1200);
-      const res = await fetch(`${url}/health`, { method: 'GET', cache: 'no-store', signal: controller.signal });
-      clearTimeout(t);
-      if (res.ok) return (_backendCache = url);
-    }
-  } catch (e) {
-    console.warn("resolveBackendUrl failed:", e);
-  }
-  const probes = ['http://127.0.0.1:3000', 'http://localhost:3000'];
-  for (const base of probes) {
-    try {
-      const controller = new AbortController();
-      const t = setTimeout(() => controller.abort(), 1500);
-      const res = await fetch(`${base}/health`, { method: 'GET', cache: 'no-store', signal: controller.signal });
-      clearTimeout(t);
-      if (res.ok) {
-        await chrome.storage.local.set({ tmBackendUrl: (_backendCache = base) });
-        console.log('[TM] Using local backend at', _backendCache);
-        return _backendCache;
-      }
-    } catch (_) {}
-  }
-  return (_backendCache = 'http://localhost:3000');
+  const { tmBackendUrl } = await chrome.storage.local.get(["tmBackendUrl"]);
+  return tmBackendUrl || PRODUCTION_BACKEND;
 }
 
 async function backendFetch(path, options = {}) {
@@ -231,7 +197,6 @@ class TimeTracker {
     this.initialize();
   }
 
-  // Merge overlapping/contiguous session intervals and sum their durations
   sumMergedSessions(sessions) {
     try {
       const items = (Array.isArray(sessions) ? sessions : [])
@@ -259,7 +224,6 @@ class TimeTracker {
     }
   }
 
-  // Compute safe duration with 30-minute gap detection and per-session cap
   calculateDurationWithGapCheck(startTime, lastSavedAt, nowTs) {
     const GAP_MS = 30 * 60 * 1000;
     const MAX_SESSION = 12 * 60 * 60 * 1000;
@@ -267,7 +231,6 @@ class TimeTracker {
     const safeLast = Number.isFinite(lastSavedAt) ? Number(lastSavedAt) : safeStart;
     const now = Number.isFinite(nowTs) ? Number(nowTs) : Date.now();
     if (now - safeLast > GAP_MS) {
-      // Inactive gap: close at lastSavedAt
       const dur = Math.max(0, Math.min(MAX_SESSION, safeLast - safeStart));
       return { duration: dur, endAt: safeLast, gap: true };
     }
@@ -340,7 +303,6 @@ class TimeTracker {
     const timezoneOffsetMinutes = new Date().getTimezoneOffset();
     const localDate = new Date(startTime - timezoneOffsetMinutes * 60000).toISOString().split("T")[0];
 
-    // Abrupt duration guard: cap added duration to remaining time in the user's local day
     try {
       const { timeData = {} } = await chrome.storage.local.get(["timeData"]);
       const existing = timeData?.[localDate]?.[domain]?.sessions || [];
@@ -349,12 +311,13 @@ class TimeTracker {
       const endLocalCoord = (Math.min(endTime, Date.now()) - (timezoneOffsetMinutes * 60000));
       const elapsedInDay = Math.max(0, endLocalCoord - dayStartLocalMs);
       const MAX_DAILY = 24 * 60 * 60 * 1000;
-      const dayCap = Math.min(MAX_DAILY, elapsedInDay + 60 * 1000); // +60s grace
+      const dayCap = Math.min(MAX_DAILY, elapsedInDay + 60 * 1000);
       const remaining = Math.max(0, dayCap - existingTotal);
       if (duration > remaining) duration = remaining;
-      if (duration <= 0) return; // nothing reasonable to add
+      if (duration <= 0) return;
       if ((endTime - startTime) > duration) endTime = startTime + duration;
-    } catch (_) { /* best-effort */ }
+    } catch (_) {}
+
     const { userEmail, tm_auth_token } = await chrome.storage.local.get(["userEmail", "tm_auth_token"]);
     if (!userEmail || !tm_auth_token) {
       await this.storeSessionLocally(domain, startTime, endTime, duration, category, timezoneOffsetMinutes);
@@ -368,7 +331,7 @@ class TimeTracker {
     };
     const res = await backendFetch("/api/time-data/sync", { method: 'POST', body: JSON.stringify(payload) });
     if (!res.ok) await this.storeSessionLocally(domain, startTime, endTime, duration, category, timezoneOffsetMinutes);
-    // Update lastSavedAt for any active session of this domain/tab if present
+
     try {
       for (const [id, sess] of Object.entries(this.activeSessions)) {
         if (sess?.domain === domain && sess?.startTime === startTime) {
@@ -495,7 +458,7 @@ async function checkBlockedSite(url) {
     const domain = urlObj.hostname.replace(/^www\./, '').toLowerCase();
     const fullUrl = url.toLowerCase();
     let decodedUrl = fullUrl;
-    try { decodedUrl = decodeURIComponent(fullUrl); } catch (_) { /* ignore decode errors */ }
+    try { decodedUrl = decodeURIComponent(fullUrl); } catch (_) {}
     for (const [blockedDomain, config] of blockedSites) {
       if (!config?.enabled) continue;
       const b = blockedDomain.toLowerCase();
@@ -504,7 +467,6 @@ async function checkBlockedSite(url) {
     for (const [keyword, config] of blockedKeywords) {
       if (!config?.enabled || !keyword) continue;
       const kw = keyword.toLowerCase();
-      // Match keyword as token in domain OR anywhere in encoded/decoded URL
       if (
         domain.split('.').some(part => part === kw) ||
         fullUrl.includes(kw) ||
@@ -567,7 +529,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     })();
   }
 });
-
 
 chrome.tabs.onCreated.addListener((tab) => {
   if (tab.active) tracker.handleTabChange(tab);
@@ -646,17 +607,17 @@ function generateEmailReportBg(timeData, date) {
   }).sort((a, b) => b.time - a.time);
   const productiveTime = categoryData.Work + categoryData.Professional + categoryData.Other * 0.5;
   const productivityScore = totalTime > 0 ? Math.round((productiveTime / totalTime) * 100) : 0;
-  let report = `TimeMachine Daily Report - ${new Date(date).toLocaleDateString()}\n\n📊 DAILY SUMMARY:\nTotal Time Online: ${formatDurationBg(totalTime)}\nProductivity Score: ${productivityScore}%\nUnique Sites: ${domainTimes.length}\n\n🏆 TOP SITES:`;
+  let report = `TimeMachine Daily Report - ${new Date(date).toLocaleDateString()}\n\nDAILY SUMMARY:\nTotal Time Online: ${formatDurationBg(totalTime)}\nProductivity Score: ${productivityScore}%\nUnique Sites: ${domainTimes.length}\n\nTOP SITES:`;
   domainTimes.slice(0, 5).forEach((site, i) => {
     const percentage = totalTime > 0 ? ((site.time / totalTime) * 100).toFixed(1) : 0;
     report += `\n${i + 1}. ${site.domain}: ${formatDurationBg(site.time)} (${percentage}%)`;
   });
-  report += `\n\n📈 BY CATEGORY:`;
+  report += `\n\nBY CATEGORY:`;
   for (const [category, time] of Object.entries(categoryData)) {
     if (time > 0) report += `\n${category}: ${formatDurationBg(time)} (${((time / totalTime) * 100).toFixed(1)}%)`;
   }
-  const insight = productivityScore >= 70 ? '🎉 Great job! Highly productive day.' : productivityScore >= 40 ? '💪 Good work! Room for improvement.' : '🎯 Focus time! Try productive activities.';
-  return `${report}\n\n💡 INSIGHT: ${insight}\n\nKeep tracking your time!\nTimeMachine Extension`;
+  const insight = productivityScore >= 70 ? 'Great job! Highly productive day.' : productivityScore >= 40 ? 'Good work! Room for improvement.' : 'Focus time! Try productive activities.';
+  return `${report}\n\nINSIGHT: ${insight}\n\nKeep tracking your time!\nTimeMachine Extension`;
 }
 
 function generateEmailHtmlReportBg(timeData, date) {
@@ -794,6 +755,8 @@ try {
   console.warn('Failed to set report schedule alarm:', e);
 }
 
+let _backendCache = null;
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   (async () => {
     try {
@@ -821,20 +784,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               sendResponse({ status: 'error', error: 'Invalid request parameters' });
               break;
             }
-            
-            // Update local tracker
             tracker.siteCategories[domain] = category;
             await tracker.saveSiteCategories();
-            
-            // Try to sync with backend
             const payload = { userEmail, date, domain, category };
             const res = await backendFetch('/api/time-data/category', { method: 'PATCH', body: JSON.stringify(payload) });
-            
             if (!res.ok) {
               console.warn('Backend sync failed, storing locally:', res.status);
               await tracker.storeSessionLocally(domain, Date.now(), Date.now(), 1, category);
             }
-            
             sendResponse({ status: 'success', message: 'Category updated successfully' });
           } catch (error) {
             console.error('updateCategory error:', error);
@@ -898,7 +855,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           sendResponse({ success: true, keywords: Array.from(blockedKeywords.entries()) });
           break;
         case "contentKeywordDetected":
-          // Content script detected keyword within page content; re-check including page URL and block.
           if (!request.keyword) return sendResponse({ status: 'ignored' });
           try {
             const candidateUrl = request.url || sender?.tab?.url;
@@ -942,9 +898,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           break;
         case "setBackendUrl":
           if (typeof request.url !== 'string') return sendResponse({ status: 'error', error: 'Invalid URL' });
-          _backendCache = request.url.replace(/\/$/, '');
-          await chrome.storage.local.set({ tmBackendUrl: _backendCache });
-          sendResponse({ status: 'ok', url: _backendCache });
+          const clean = request.url.replace(/\/$/, '');
+          _backendCache = clean;
+          await chrome.storage.local.set({ tmBackendUrl: clean });
+          sendResponse({ status: 'ok', url: clean });
           break;
         default:
           sendResponse({ status: 'error', error: 'Unknown action' });

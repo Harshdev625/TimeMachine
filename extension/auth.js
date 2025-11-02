@@ -4,7 +4,8 @@ const STORAGE_KEYS = {
   USER_ID: 'userId'
 };
 
-// Token storage for auth token, email, and userId
+const PRODUCTION_BACKEND = '__PRODUCTION_BACKEND_URL__';
+
 const TokenStorage = {
   _decode(token) {
     try {
@@ -58,13 +59,9 @@ const TokenStorage = {
   }
 };
 
-// Removed modal-based auth UI. Auth now relies solely on the inline form (#emailPrompt) present in popup.html.
-// authenticateUser will reveal the inline prompt and wait for a "tm-auth-success" event fired after successful login.
-
 const login = async (email, password) => authRequest('login', email, password);
 const signup = async (email, password) => authRequest('signup', email, password);
 
-// Shared auth request handler
 const authRequest = async (type, email, password) => {
   try {
     const backendUrl = await resolveBackendUrl();
@@ -87,7 +84,6 @@ const authRequest = async (type, email, password) => {
   }
 };
 
-// Check authentication status
 const isAuthenticated = async () => {
   window.__TM_AUTH_CACHE__ = window.__TM_AUTH_CACHE__ || { last: 0, ok: false };
   const CACHE_TTL = 5 * 60 * 1000;
@@ -121,14 +117,12 @@ const isAuthenticated = async () => {
   }
 };
 
-// Main auth function
 const authenticateUser = async callback => {
   if (await isAuthenticated()) {
     const { email } = await TokenStorage.getToken();
     callback?.(true, email);
     return true;
   }
-  // Show inline auth form
   try {
     document.getElementById('emailPrompt')?.classList.remove('hidden');
     document.getElementById('mainApp')?.classList.add('hidden');
@@ -146,39 +140,11 @@ const authenticateUser = async callback => {
 
 const logout = async () => await TokenStorage.clearToken();
 
-// Resolve backend URL with fallback
-const resolveBackendUrl = async () => {
-  try {
-    if (window.TMConfig) {
-      await window.TMConfig.loadOverrides();
-      return window.TMConfig.current.backendBaseUrl;
-    }
-  } catch {}
-  try {
-    const { tmBackendUrl } = await chrome.storage.local.get(['tmBackendUrl']);
-    if (tmBackendUrl && /^https?:\/\//.test(tmBackendUrl)) {
-      const url = tmBackendUrl.replace(/\/$/, '');
-      try {
-        const controller = new AbortController();
-        setTimeout(() => controller.abort(), 1200);
-        const res = await fetch(`${url}/health`, { method: 'GET', cache: 'no-store', signal: controller.signal });
-        if (res.ok) return url;
-      } catch {}
-    }
-  } catch {}
-  for (const base of ['http://127.0.0.1:3000', 'http://localhost:3000']) {
-    try {
-      const controller = new AbortController();
-      setTimeout(() => controller.abort(), 1500);
-      const res = await fetch(`${base}/health`, { method: 'GET', cache: 'no-store', signal: controller.signal });
-      if (res.ok) {
-        try { await chrome.storage.local.set({ tmBackendUrl: base }); } catch {}
-        return base;
-      }
-    } catch {}
-  }
-  return 'http://localhost:3000';
-};
+async function resolveBackendUrl() {
+  const { tmBackendUrl } = await chrome.storage.local.get(['tmBackendUrl']);
+  return tmBackendUrl || PRODUCTION_BACKEND;
+}
 
+window.resolveBackendUrl = resolveBackendUrl;
 window.Auth = { authenticateUser, login, signup, logout, isAuthenticated };
-try { window.TokenStorage = TokenStorage; } catch {}
+window.TokenStorage = TokenStorage;
